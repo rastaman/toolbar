@@ -6,11 +6,10 @@
 
 package org.tigris.toolbar.actions.uml;
 
-import javax.swing.Icon;
 import org.tigris.toolbar.CanvasPanel;
 import org.tigris.toolbar.LogPanel;
-import org.tigris.toolbutton.AbstractButtonAction;
-import org.tigris.toolbutton.ResourceLocator;
+import org.tigris.toolbar.toolbutton.AbstractButtonAction;
+import org.tigris.toolbar.toolbutton.ResourceLocator;
 
 /**
  * A simple button action that simply logs that it took place.

@@ -8,8 +8,8 @@ package org.tigris.toolbar.actions.uml;
 
 import org.tigris.toolbar.CanvasPanel;
 import org.tigris.toolbar.LogPanel;
-import org.tigris.toolbutton.AbstractButtonAction;
-import org.tigris.toolbutton.ResourceLocator;
+import org.tigris.toolbar.toolbutton.AbstractButtonAction;
+import org.tigris.toolbar.toolbutton.ResourceLocator;
 
 /**
  * The action of pressing the "Select" button. This changes the mode of

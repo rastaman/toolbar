@@ -7,6 +7,9 @@
 package org.tigris.toolbar;
 
 import java.awt.Component;
+import java.util.Collection;
+import java.util.Iterator;
+
 import javax.swing.Action;
 import javax.swing.JButton;
 import javax.swing.JMenu;
@@ -115,6 +118,111 @@ public class ToolBarFactory {
         addItemsToToolBar(tb, items, rollover);
         return tb;
     }
+
+
+
+    
+    /********************************/
+
+
+
+    /**
+     * <p>Create a new toolbar containing buttons and other controls based
+     * on the given array.</p>
+     * <p>The array elements can be on of the following types.</p>
+     * <table>
+     * <tr><td><code>null</code></td>
+     * <td>Results in a toolbar seperator being created</code></td>
+     * <tr><td><code>Action</code></td>
+     * <td>Results in a button being created which is listening
+     * to the changes on the action and will perform the action
+     * when pressed</td></tr>
+     * <tr><td><code>Component</code></td>
+     * <td>Will place the component on the toolbar</td></tr>
+     * </table>
+     * @param items the collection of elements representing toolbar items
+     */
+    public static JToolBar createToolBar(Collection items) {
+        return createToolBar(false/*rollover*/, "", items, true/*floatable*/);
+    }
+    
+    /**
+     * <p>Create a new toolbar containing buttons and other controls based
+     * on the given array with the given rollover effect.</p>
+     * @param rollover true if buttons are to be shown with rollover effect
+     * @param items the collection of elements representing toolbar items
+     */
+    public static JToolBar createToolBar(boolean rollover, Collection items) {
+        return createToolBar(rollover, items, true/*floatable*/);
+    }
+    
+    /**
+     * <p>Create a new toolbar containing buttons and other controls based
+     * on the given array with the given rollover effect and float style.</p>
+     * @param rollover true if buttons are to be shown with rollover effect
+     * @param items the collection of elements representing toolbar items
+     * @param floatable true if the toolbar can be dragged into a floating
+     *                  position
+     */
+    public static JToolBar createToolBar(boolean rollover, Collection items, boolean floatable) {
+        return createToolBar(rollover, "", items, floatable);
+    }
+    
+    /**
+     * <p>Create a new toolbar containing buttons and other controls based
+     * on the given array with the given rollover effect and float style.</p>
+     * @param rollover true if buttons are to be shown with rollover effect
+     * @param items the collection of elements representing toolbar items
+     * @param floatable true if the toolbar can be dragged into a floating
+     *                  position
+     */
+    public static JToolBar createToolBar(String name, Collection items) {
+        return createToolBar(false/*rollover*/, name, items, true/*floatable*/);
+    }
+    
+    /**
+     * <p>Create a named toolbar containing buttons and other controls based
+     * on the given array with the given rollover effect and float style.</p>
+     * @param name the name to place in the titlebar of the toolbar
+     * @param items the collection of elements representing toolbar items
+     * @param floatable true if the toolbar can be dragged into a floating
+     *                  position
+     */
+    public static JToolBar createToolBar(String name, Collection items, boolean floatable) {
+        return createToolBar(false/*rollover*/, name, items, floatable);
+    }
+    
+    /**
+     * <p>Create a named toolbar containing buttons and other controls based
+     * on the given array with the given rollover effect and float style.</p>
+     * @param rollover true if buttons are to be shown with rollover effect
+     * @param name the name to place in the titlebar of the toolbar
+     * @param items the collection of elements representing toolbar items
+     * @param floatable true if the toolbar can be dragged into a floating
+     *                  position
+     */
+    public static JToolBar createToolBar(boolean rollover, 
+                                         String name, 
+                                         Collection items, 
+                                         boolean floatable) {
+        JToolBar tb = new ToolBar(name);
+        if (rollover) {
+            tb.putClientProperty("JToolBar.isRollover",  Boolean.TRUE);
+        } else {
+            tb.putClientProperty("JToolBar.isRollover",  Boolean.FALSE);
+        }
+        tb.setFloatable(floatable);
+        addItemsToToolBar(tb, items, rollover);
+        return tb;
+    }
+    
+    
+    
+    
+    /********************************/
+    
+    
+    
     
     /**
      * <p>Create a new toolbar containing buttons and other controls based
@@ -226,25 +334,42 @@ public class ToolBarFactory {
      * @param rollover true if rollover effect is required.
      */
     private static void addItemsToToolBar(JToolBar toolBar, Object items[], boolean rollover) {
-        
         for (int i=0; i < items.length; ++i) {
-            Object o = items[i];
-            if (o == null) {
-                toolBar.addSeparator();
-            } else if (o instanceof Action) {
-                Action a = (Action)o;
-                JButton button = toolBar.add(a);
-                if (button.getToolTipText() == null || button.getToolTipText().trim().length() == 0) {
-                    button.setToolTipText((String)a.getValue(Action.NAME));
-                }
-            } else if (o instanceof Object[]) {
-                Object[] subActions = (Object[])o;
-                JButton button = buildPopupToolBoxButton(subActions, rollover);
-                button.setBorderPainted(false);
-                toolBar.add(button);
-            } else if (o instanceof Component) {
-                toolBar.add((Component)o);
+            addItemToToolBar(toolBar, items[i], rollover);
+        }
+    }
+
+    /**
+     * <p>Populate the toolbar with the specific widgets required</p>
+     * @param toolBar The toolbar to which to add the buttons.
+     * @param items the items on which to base the buttons
+     * @param rollover true if rollover effect is required.
+     */
+    private static void addItemsToToolBar(JToolBar toolBar, Collection items, boolean rollover) {
+        
+        Iterator it = items.iterator();
+        while (it.hasNext()) {
+            addItemToToolBar(toolBar, it.next(), rollover);
+        }
+    }
+
+    private static void addItemToToolBar(JToolBar toolBar, Object item, boolean rollover) {
+        
+        if (item == null) {
+            toolBar.addSeparator();
+        } else if (item instanceof Action) {
+            Action a = (Action)item;
+            JButton button = toolBar.add(a);
+            if (button.getToolTipText() == null || button.getToolTipText().trim().length() == 0) {
+                button.setToolTipText((String)a.getValue(Action.NAME));
             }
+        } else if (item instanceof Object[]) {
+            Object[] subActions = (Object[])item;
+            JButton button = buildPopupToolBoxButton(subActions, rollover);
+            button.setBorderPainted(false);
+            toolBar.add(button);
+        } else if (item instanceof Component) {
+            toolBar.add((Component)item);
         }
     }
 

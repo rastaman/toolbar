@@ -16,15 +16,20 @@ import javax.swing.JToolBar;
 import org.tigris.toolbar.actions.file.NewAction;
 import org.tigris.toolbar.actions.file.OpenAction;
 import org.tigris.toolbar.actions.file.SaveAction;
+import org.tigris.toolbar.actions.edit.CopyAction;
+import org.tigris.toolbar.actions.edit.CutAction;
+import org.tigris.toolbar.actions.edit.PasteAction;
+import org.tigris.toolbar.actions.edit.UndoAction;
+import org.tigris.toolbar.actions.edit.RedoAction;
 import org.tigris.toolbar.layouts.DockBorderLayout;
+import org.tigris.toolbar.layouts.DockLayout;
 import org.tigris.toolbar.toolbutton.ResourceLocator;
 
 public class Test extends JFrame implements ActionListener {
 
-    JToolBar fileToolBar1;
-    JToolBar fileToolBar2;
-    JToolBar fileToolBar3;
-    JToolBar fileToolBar4;
+    JToolBar fileToolBar;
+    JToolBar editToolBar;
+    JToolBar viewToolBar;
 
     String javaVersion;
     
@@ -36,7 +41,7 @@ public class Test extends JFrame implements ActionListener {
             }
         });
         
-        f.setBounds(10, 10, 400, 400);
+        f.setBounds(10, 10, 600, 400);
         f.setVisible(true);
     }
 
@@ -51,7 +56,7 @@ public class Test extends JFrame implements ActionListener {
 
         buildMenu();
 
-        getContentPane().setLayout(new DockBorderLayout());
+        getContentPane().setLayout(new DockLayout(this, DockLayout.STACKING_STYLE));
         
         createApplicationToolbars(getContentPane());
 
@@ -142,28 +147,38 @@ public class Test extends JFrame implements ActionListener {
     }
     
     private void createApplicationToolbars(Container pane) {
-        Object[] actions = {
+        Object[] fileActions = {
             new NewAction ("New",  ResourceLocator.getInstance().getIcon("New.gif")),
             new OpenAction("Open", ResourceLocator.getInstance().getIcon("Open.gif")),
-            new SaveAction("Save", ResourceLocator.getInstance().getIcon("Save.gif"))
+            new SaveAction("Save", ResourceLocator.getInstance().getIcon("Save.gif")),
+			new SaveAction("PageSetup", ResourceLocator.getInstance().getIcon("PageSetup.gif")),
+			new SaveAction("Print", ResourceLocator.getInstance().getIcon("Print.gif"))
         };
 
-        if (fileToolBar1 != null) remove(fileToolBar1);
-        if (fileToolBar2 != null) remove(fileToolBar2);
-        if (fileToolBar3 != null) remove(fileToolBar3);
-        if (fileToolBar4 != null) remove(fileToolBar4);
+		Object[] editActions = {
+			new CutAction ("Cut",  ResourceLocator.getInstance().getIcon("Cut.gif")),
+			new CopyAction("Copy", ResourceLocator.getInstance().getIcon("Copy.gif")),
+			new PasteAction("Paste", ResourceLocator.getInstance().getIcon("Paste.gif")),
+			new UndoAction("Undo", ResourceLocator.getInstance().getIcon("Undo.gif")),
+			new RedoAction("Redo", ResourceLocator.getInstance().getIcon("Redo.gif"))
+		};
+
+		Object[] viewActions = {
+			new CutAction ("ZoomIn",  ResourceLocator.getInstance().getIcon("ZoomReset.gif")),
+			new CopyAction("ZoomOut", ResourceLocator.getInstance().getIcon("ZoomOut.gif")),
+			new PasteAction("ZoomReset", ResourceLocator.getInstance().getIcon("ZoomIn.gif"))
+		};
+
+        if (fileToolBar != null) remove(fileToolBar);
+        if (editToolBar != null) remove(editToolBar);
+        if (viewToolBar != null) remove(viewToolBar);
         
-        fileToolBar1 = ToolBarFactory.createToolBar(true, "File", actions, true);
-        fileToolBar2 = ToolBarFactory.createToolBar(true, "File", actions, true);
-        fileToolBar3 = ToolBarFactory.createToolBar(true, "File", actions, true);
-        fileToolBar4 = new ToolBar("File");
-        fileToolBar4.add(new NewAction ("New",  ResourceLocator.getInstance().getIcon("New.gif")));
-        fileToolBar4.add(new NewAction ("Open", ResourceLocator.getInstance().getIcon("Open.gif")));
-        fileToolBar4.add(new NewAction ("Save", ResourceLocator.getInstance().getIcon("Save.gif")));
+        fileToolBar = ToolBarFactory.createToolBar(true, "File", fileActions, true);
+        editToolBar = ToolBarFactory.createToolBar(true, "Edit", editActions, true);
+        viewToolBar = ToolBarFactory.createToolBar(true, "View", viewActions, true);
         
-        pane.add(fileToolBar1, DockBorderLayout.NORTH);
-        pane.add(fileToolBar2, DockBorderLayout.NORTH);
-        pane.add(fileToolBar3, DockBorderLayout.NORTH);
-        pane.add(fileToolBar4, DockBorderLayout.NORTH);
+        pane.add(DockLayout.north, fileToolBar);
+        pane.add(DockLayout.north, editToolBar);
+        pane.add(DockLayout.north, viewToolBar);
     }
 }

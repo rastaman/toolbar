@@ -44,10 +44,21 @@ public class ToolBar extends AbstractToolBar {
         super();
     }
     
-    /** 
-     * Creates a new instance of Toolbar
+    /** Creates a new instance of Toolbar
      */
-    public ToolBar(boolean floatable) {
-        super(floatable);
+    public ToolBar(String name) {
+        super(name);
+    }
+    
+    /** Creates a new instance of Toolbar
+     */
+    public ToolBar(String name, int orientation) {
+        super(name, orientation);
+    }
+    
+    /** Creates a new instance of Toolbar
+     */
+    public ToolBar(int orientation) {
+        super(orientation);
     }
 }

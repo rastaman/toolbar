@@ -10,12 +10,14 @@ allow reuse by other swing based applications.
 <p>ToolBar comes with -
 <ul>
 <li>
-    a ToolBarManager to allow changes in look and feel to be
-    broadcast to all toolbars in your application.
+    a toolbar manager to allow changes in look and feel to be
+    broadcast to all toolbars in your application (not yet complete).
 </li>
 <li>
-    a ToolBar class (extending JToolBar) which allows building of specialist buttons from the
-    <a href="http://toolbutton.tigris.org">ToolButton</a> project
+    a dropdown toolbar button that allows selection from multiple sub-items.
+</li>
+<li>
+    a toolbar factory for simple creation of toolbars.
 </li>
 <li>
     a layout manager that allows toolbars to be docked to any edge of your 
@@ -34,7 +36,10 @@ minimum program changes (construction only)</p>
 <p>Assumptions</p>
 
 <ul>
-    <li>ToolBar shall be Java2 compliant JDK1.2 and above</li>
+    <li>
+        ToolBar shall be Java2 compliant JDK1.3 and above (an attempt will be made 
+        to make backwards compatible to JDK1.2)
+    </li>
     <li>
         ToolBar shall always extend the standard swing component JToolBar to ensure
         easy replacement in existing swing applications
@@ -48,17 +53,11 @@ minimum program changes (construction only)</p>
 
 <h3>Related resources</h3>
 
-<ul>
-    <li>
-        ToolBar makes use of the <a href="http://toolbutton.tigris.org">ToolButton</a>
-        project
-    </li>
-    <li>
-        ToolBar was initially created as an additional component to
-        <a href="http://argouml.tigris.org">ArgoUML</a>.
-        Initial development of ToolBar will be steered by the requirements of ArgoUML.
-    </li>
-</ul>
+<p>
+ToolBar was initially created as an additional component to
+<a href="http://argouml.tigris.org">ArgoUML</a>.
+Initial development of ToolBar will be steered by the requirements of ArgoUML.
+</p>
 
 </body>
 </html>

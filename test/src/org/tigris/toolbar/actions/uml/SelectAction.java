@@ -6,14 +6,26 @@
 
 package org.tigris.toolbar.actions.uml;
 
+import org.tigris.toolbar.CanvasPanel;
+import org.tigris.toolbar.LogPanel;
+import org.tigris.toolbutton.AbstractButtonAction;
+import org.tigris.toolbutton.ResourceLocator;
+
 /**
- * A simple button action that simply logs that it took place.
+ * The action of pressing the "Select" button. This changes the mode of
+ * canvas to null so that clicking on the canvas has no effect.
  *
  * @author Bob Tarling
  */
-public class SelectAction extends UmlAction {
+public class SelectAction extends AbstractButtonAction {
 
     public SelectAction() {
-        super("Select");
+        super("Select", ResourceLocator.getInstance().getIcon("Select.gif"));
+    }
+    
+    public void actionPerformed(java.awt.event.ActionEvent actionEvent) {
+        super.actionPerformed(actionEvent);
+        LogPanel.getInstance().add("Select clicked");
+        CanvasPanel.getInstance().setSelectedIcon(null, false);
     }
 }

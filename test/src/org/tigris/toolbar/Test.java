@@ -16,11 +16,9 @@ import org.tigris.toolbar.actions.file.OpenAction;
 import org.tigris.toolbar.actions.file.SaveAction;
 import org.tigris.toolbutton.ResourceLocator;
 
-public class Test extends JFrame implements ActionListener
-{
+public class Test extends JFrame implements ActionListener {
     
-    public static void main(String[] args)
-    {
+    public static void main(String[] args) {
         JFrame f = new Test();
         f.addWindowListener( new WindowAdapter() {
             public void windowClosing(WindowEvent we) {
@@ -65,6 +63,7 @@ public class Test extends JFrame implements ActionListener
         } catch (Exception ex) {
             // Well, what can we do...
         }
+        
         SwingUtilities.updateComponentTreeUI(this);
         getContentPane().invalidate();
         validate();
@@ -74,30 +73,53 @@ public class Test extends JFrame implements ActionListener
         JMenuBar menuBar = new JMenuBar();
         JMenu lnfMenu = new JMenu("Look and Feel");
         
-        JMenuItem sysItem = new JMenuItem("System");
-        sysItem.setActionCommand("System");
-        sysItem.addActionListener(this);
+        String[] names = getAvailableLookAndFeelNames();
+        for (int i = 0; i < names.length; ++i) {
+            JMenuItem menuItem = new JMenuItem(names[i]);
+            menuItem.setActionCommand(names[i]);
+            menuItem.addActionListener(this);
+            lnfMenu.add(menuItem);
+        }
         
-        JMenuItem javaItem = new JMenuItem("Java");
-        javaItem.setActionCommand("Java");
-        javaItem.addActionListener(this);
-
-        lnfMenu.add(sysItem);
-        lnfMenu.add(javaItem);
         menuBar.add(lnfMenu);
         setJMenuBar(menuBar);
     }
     
-    public void actionPerformed(ActionEvent ae) {
-        JMenuItem item = (JMenuItem)ae.getSource();
-        if (item.getActionCommand().equals("System")) {
-            try { UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName()); }
-            catch (Exception ex) { }
-        } else {
-            try { UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName()); }
-            catch (Exception ex) { }
+    /**
+     * Returns the display names of the available look and feel choices.
+     * 
+     * @return	look and feel display names
+     **/
+    public String[] getAvailableLookAndFeelNames() {
+        UIManager.LookAndFeelInfo[] lafs = UIManager.getInstalledLookAndFeels();
+
+        String[] names = new String[lafs.length];
+        for (int i = 0; i < lafs.length; ++i) {
+            names[i] = lafs[i].getName();
         }
 
+        return names;
+    }
+
+    public String getLookAndFeelClassName(String name) {
+        UIManager.LookAndFeelInfo[] lafs = UIManager.getInstalledLookAndFeels();
+
+        for (int i = 0; i < lafs.length; ++i) {
+            if (name.equals(lafs[i].getName())) return lafs[i].getClassName(); 
+        }
+
+        return "";
+    }
+
+    public void actionPerformed(ActionEvent ae) {
+        JMenuItem item = (JMenuItem)ae.getSource();
+        String lookAndFeelName = item.getActionCommand();
+        System.out.println(lookAndFeelName);
+        String lookAndFeelClassName = getLookAndFeelClassName(lookAndFeelName);
+        System.out.println(lookAndFeelClassName);
+        try {
+            UIManager.setLookAndFeel(getLookAndFeelClassName(item.getActionCommand()));
+        } catch (Exception ex) { }
         SwingUtilities.updateComponentTreeUI(this);
         getContentPane().invalidate();
         validate();

@@ -10,7 +10,7 @@ import java.awt.Component;
 import javax.swing.Action;
 import javax.swing.JButton;
 import javax.swing.JToolBar;
-import org.tigris.toolbutton.PopupToolBoxButton;
+import org.tigris.toolbar.toolbutton.PopupToolBoxButton;
 
 /**
  * A factory class for creating new instances of toolbars

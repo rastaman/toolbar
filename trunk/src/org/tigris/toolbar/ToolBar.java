@@ -10,9 +10,8 @@ import java.awt.Insets;
 import javax.swing.Action;
 import javax.swing.JButton;
 import javax.swing.JToolBar;
-import org.tigris.toolbutton.ModalAction;
-import org.tigris.toolbutton.ModalButton;
-import org.tigris.toolbutton.ToolButton;
+import org.tigris.toolbar.toolbutton.ModalAction;
+import org.tigris.toolbar.toolbutton.ModalButton;
 
 /**
  * A toolbar class which assumes rollover effects and automatically gives tooltip

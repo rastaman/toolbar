@@ -129,6 +129,9 @@ public class ToolBarFactory {
             } else if (o instanceof Action) {
                 Action a = (Action)o;
                 JButton button = toolBar.add(a);
+                if (button.getToolTipText() == null || button.getToolTipText().trim().length() == 0) {
+	                button.setToolTipText((String)a.getValue(Action.NAME));
+				}
             } else if (o instanceof Object[]) {
                 Object[] subActions = (Object[])o;
                 JButton button = buildPopupToolBoxButton(subActions, rollover);

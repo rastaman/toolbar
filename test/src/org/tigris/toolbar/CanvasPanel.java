@@ -7,6 +7,7 @@
 package org.tigris.toolbar;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.GridLayout;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
@@ -27,6 +28,7 @@ import org.tigris.toolbar.actions.uml.UniAssociationAction;
 import org.tigris.toolbar.actions.uml.UniCompositionAction;
 import org.tigris.toolbutton.AbstractButtonAction;
 import org.tigris.toolbutton.ResourceLocator;
+import org.tigris.toolbutton.ToolButton;
 
 /**
  * An example canvas to demonstrate the previously selected actions
@@ -53,6 +55,8 @@ public class CanvasPanel extends JPanel {
         associationActions
     };
 
+    private JToolBar toolBar = null;
+    
     private Icon selectedIcon;
     
     public static CanvasPanel getInstance() {
@@ -61,7 +65,7 @@ public class CanvasPanel extends JPanel {
     
     /** Creates a new instance of ActionCanvas */
     private CanvasPanel() {
-        JToolBar toolBar = ToolBarFactory.createToolBar(true, actions, false);
+        toolBar = ToolBarFactory.createToolBar(true, actions, false);
         JPanel canvas = new JPanel();
         setLayout(new BorderLayout());
         add(toolBar, BorderLayout.NORTH);
@@ -75,6 +79,16 @@ public class CanvasPanel extends JPanel {
     public void setSelectedIcon(Icon selectedIcon) {
         this.selectedIcon = selectedIcon;
     }
+
+    public void deselectOtherTools() {
+        int toolCount=toolBar.getComponentCount();
+        for (int i=1; i<toolCount; ++i) {
+            Component c = toolBar.getComponent(i);
+            if (c instanceof ToolButton) {
+                ((ToolButton)c).setSelected(false);
+            }
+        }
+    }
     
     class CanvasAction extends AbstractAction {
         
@@ -83,12 +97,9 @@ public class CanvasPanel extends JPanel {
         }
         
         public void actionPerformed(java.awt.event.ActionEvent actionEvent) {
-            System.out.println("Canvas action");
-            if (actionEvent.getSource() instanceof JButton) {
-                System.out.println("Canvas button action");
-                JButton button = (JButton)actionEvent.getSource();
-                button.setIcon(selectedIcon);
-            }
+            JButton button = (JButton)actionEvent.getSource();
+            button.setIcon(selectedIcon);
+            deselectOtherTools();
         }
     }
 }

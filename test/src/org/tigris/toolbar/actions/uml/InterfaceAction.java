@@ -7,7 +7,8 @@
 package org.tigris.toolbar.actions.uml;
 
 /**
- * A simple button action that simply logs that it took place.
+ * A simple button that puts the canvas into accept interface mode
+ * and logs that it took place.
  *
  * @author Bob Tarling
  */

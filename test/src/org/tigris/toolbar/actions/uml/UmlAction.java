@@ -17,14 +17,23 @@ import org.tigris.toolbutton.ResourceLocator;
  *
  * @author Bob Tarling
  */
-public class UmlAction extends AbstractButtonAction {
+public abstract class UmlAction extends AbstractButtonAction {
 
+    private static UmlAction lastAction = null;
+    private long lastActioned = 0;
+    
     public UmlAction(String name) {
         super(name, ResourceLocator.getInstance().getIcon(name + ".gif"));
     }
 
     public void actionPerformed(java.awt.event.ActionEvent actionEvent) {
-        LogPanel.getInstance().add(getName() + " clicked");
-        CanvasPanel.getInstance().setSelectedIcon(this.getIcon());
+        super.actionPerformed(actionEvent);
+        boolean doubleClick = isDoubleClick();
+        if (doubleClick) {
+            LogPanel.getInstance().add(getName() + " double-clicked");
+        } else {
+            LogPanel.getInstance().add(getName() + " clicked");
+        }
+        CanvasPanel.getInstance().setSelectedIcon(this.getIcon(), doubleClick);
     }
 }

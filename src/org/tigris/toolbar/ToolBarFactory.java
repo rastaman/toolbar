@@ -8,6 +8,7 @@ package org.tigris.toolbar;
 
 import java.awt.Component;
 import javax.swing.Action;
+import javax.swing.JButton;
 import javax.swing.JToolBar;
 import org.tigris.toolbutton.PopupToolBoxButton;
 
@@ -83,7 +84,9 @@ public class ToolBarFactory {
                 toolBar.addSeparator();
             } else if (o instanceof Action) {
                 Action a = (Action)o;
-                toolBar.add(a);
+                JButton button = toolBar.add(a);
+                // Required for JDK1.3 Windows
+                button.setBorderPainted(false);
             } else if (o instanceof Object[]) {
                 Object[] subActions = (Object[])o;
                 toolBar.add(buildPopupToolBoxButton(subActions, rollover));

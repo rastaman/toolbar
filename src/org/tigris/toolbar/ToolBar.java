@@ -73,13 +73,8 @@ public class ToolBar extends JToolBar {
             //System.out.println("Adding action" + action);
             button = super.add(action);
         }
+        // This is needed specifically for JDK1.3 on Windows
+        button.setMargin(new Insets(0,0,0,0));
         return button;
     }
-    
-//    public JButton add(ModalAction action) {
-//        System.out.println("Adding model action " + action);
-//        ModalButton button = new ModalButton((Action)action);
-//        add(button);
-//        return button;
-//    }
 }

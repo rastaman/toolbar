@@ -82,7 +82,8 @@ public class ToolBarFactory {
             if (o == null) {
                 toolBar.addSeparator();
             } else if (o instanceof Action) {
-                toolBar.add((Action)o);
+                Action a = (Action)o;
+                toolBar.add(a);
             } else if (o instanceof Object[]) {
                 Object[] subActions = (Object[])o;
                 toolBar.add(buildPopupToolBoxButton(subActions, rollover));

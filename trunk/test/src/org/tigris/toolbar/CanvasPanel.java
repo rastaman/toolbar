@@ -72,15 +72,20 @@ public class CanvasPanel extends JPanel {
     
     /** Creates a new instance of ActionCanvas */
     private CanvasPanel() {
-        toolBar = ToolBarFactory.createToolBar(true, actions, false);
         JPanel canvas = new JPanel();
         setLayout(new BorderLayout());
-        add(toolBar, BorderLayout.NORTH);
+        createToolBar();
         add(canvas, BorderLayout.CENTER);
         canvas.setLayout(new GridLayout(10,10));
         for (int i=0; i < 100; ++i) {
             canvas.add(new JButton(new CanvasAction()));
         }
+    }
+
+    public void createToolBar() {
+        if (toolBar != null) remove(toolBar);
+        toolBar = ToolBarFactory.createToolBar(true, actions, false);
+        add(toolBar, BorderLayout.NORTH);
     }
     
     public void setSelectedIcon(Icon selectedIcon, boolean modeLocked) {

@@ -11,6 +11,7 @@ import java.awt.Component;
 import java.awt.GridLayout;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
+import javax.swing.ButtonModel;
 import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -43,9 +44,9 @@ public class CanvasPanel extends JPanel {
     RadioAction selectAction = new RadioAction(new SelectAction());
     
     Object associationActions[][] = {
-        {new AssociationAction(), new UniAssociationAction()},
-        {new AggregationAction(), new UniAggregationAction()},
-        {new CompositionAction(), new UniCompositionAction()}
+        {new RadioAction(new AssociationAction()), new RadioAction(new UniAssociationAction())},
+        {new RadioAction(new AggregationAction()), new RadioAction(new UniAggregationAction())},
+        {new RadioAction(new CompositionAction()), new RadioAction(new UniCompositionAction())}
     };
     
     private Object actions[] = {
@@ -88,19 +89,33 @@ public class CanvasPanel extends JPanel {
      * with the supplied action.
      */
     public void deselectOtherTools(RadioAction otherThanAction) {
+        System.out.println("Looking for action " + otherThanAction);
         int toolCount=toolBar.getComponentCount();
         for (int i=0; i<toolCount; ++i) {
             Component c = toolBar.getComponent(i);
             if (c instanceof ToolButton) {
                 ToolButton tb = (ToolButton)c;
                 Action action = (Action)tb.getRealAction();
-                System.out.println("i =" + action);
-                System.out.println("s =" + otherThanAction);
                 if (action instanceof RadioAction) {
                     action = ((RadioAction)action).getAction();
                 }
-                if (!action.equals(otherThanAction.getAction())) {
-                    ((ToolButton)c).setSelected(false);
+                Action otherAction = otherThanAction;
+                if (otherThanAction instanceof RadioAction) {
+                    otherAction = otherThanAction.getAction();
+                }
+                if (!action.equals(otherAction)) {
+                    System.out.println("Unselecting " + tb);
+                    tb.setSelected(false);
+                    ButtonModel bm = tb.getModel();
+                    bm.setRollover(false);
+                    bm.setSelected(false);
+                    bm.setArmed(false);
+                    bm.setPressed(false);
+                } else {
+                    System.out.println("Selecting " + tb);
+                    tb.setSelected(true);
+                    ButtonModel bm = tb.getModel();
+                    bm.setRollover(true);
                 }
             }
         }

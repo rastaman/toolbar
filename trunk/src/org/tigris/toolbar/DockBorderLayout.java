@@ -4,18 +4,20 @@
  * Created on 23 February 2003, 17:14
  */
 
-/**
- * Layout Manager to control positions of docked toolbars
- * @author Christopher Bach
- */
-
 package org.tigris.toolbar;
 
 import java.awt.*;
 import java.util.ArrayList;
 import javax.swing.SwingConstants;
 
-public class DockLayout extends BorderLayout{
+/**
+ * <p>A layout manager which allows toolbars to be docked at any edge.</p>
+ * <p>ToolBars can be added to NORTH, SOUTH, EAST or WEST and are placed
+ * to the right (or below) of any toolbar already in the same compartment</p>
+ * @author Christopher Bach
+ */
+
+public class DockBorderLayout extends BorderLayout{
     private ArrayList north = new ArrayList(1);
     private ArrayList south = new ArrayList(1);
     private ArrayList east = new ArrayList(1);
@@ -25,7 +27,10 @@ public class DockLayout extends BorderLayout{
     public static final int VERTICAL = SwingConstants.VERTICAL;
     public static final int HORIZONTAL = SwingConstants.HORIZONTAL;
     
-    public DockLayout() {
+    /**
+     * Create a new instance of a DockBorderLayout
+     */
+    public DockBorderLayout() {
     }
     
     public void addLayoutComponent(Component c, Object con)   {
@@ -75,8 +80,10 @@ public class DockLayout extends BorderLayout{
             }
         }
     }
-    // Returns the ideal width for a vertically oriented toolbar   
-    // and the ideal height for a horizontally oriented tollbar:   
+    
+    /** Returns the ideal width for a vertically oriented toolbar   
+     * and the ideal height for a horizontally oriented toolbar
+     */
     private Dimension getPreferredDimension(ArrayList comps) {      
         int w = 0, h = 0;      
         for (int i=0; i < comps.size(); i++) {

@@ -98,7 +98,7 @@ public class CanvasPanel extends JPanel {
      * with the supplied action.
      */
     public void deselectOtherTools(RadioAction otherThanAction) {
-        System.out.println("Looking for action " + otherThanAction);
+        //System.out.println("Looking for action " + otherThanAction);
         int toolCount=toolBar.getComponentCount();
         for (int i=0; i<toolCount; ++i) {
             Component c = toolBar.getComponent(i);
@@ -113,7 +113,7 @@ public class CanvasPanel extends JPanel {
                     otherAction = otherThanAction.getAction();
                 }
                 if (!action.equals(otherAction)) {
-                    System.out.println("Unselecting " + tb);
+                    //System.out.println("Unselecting " + tb);
                     tb.setSelected(false);
                     ButtonModel bm = tb.getModel();
                     bm.setRollover(false);
@@ -122,7 +122,7 @@ public class CanvasPanel extends JPanel {
                     bm.setPressed(false);
                     tb.setBorderPainted(false);
                 } else {
-                    System.out.println("Selecting " + tb);
+                    //System.out.println("Selecting " + tb);
                     tb.setSelected(true);
                     ButtonModel bm = tb.getModel();
                     bm.setRollover(true);

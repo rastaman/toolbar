@@ -66,11 +66,11 @@ public class ToolBar extends JToolBar {
         JButton button;
 
         if (action instanceof ModalAction) {
-            System.out.println("Adding model action" + action);
+            //System.out.println("Adding model action" + action);
             button = new ModalButton(action);
             add(button);
         } else {
-            System.out.println("Adding action" + action);
+            //System.out.println("Adding action" + action);
             button = super.add(action);
         }
         return button;

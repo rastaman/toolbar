@@ -6,17 +6,23 @@
 
 package org.tigris.toolbar;
 
+import java.awt.Container;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import javax.swing.*;
+import javax.swing.JToolBar;
 import org.tigris.toolbar.actions.file.NewAction;
 import org.tigris.toolbar.actions.file.OpenAction;
 import org.tigris.toolbar.actions.file.SaveAction;
 import org.tigris.toolbutton.ResourceLocator;
 
 public class Test extends JFrame implements ActionListener {
+
+    JToolBar fileToolBar1;
+    JToolBar fileToolBar2;
+    JToolBar fileToolBar3;
     
     public static void main(String[] args) {
         JFrame f = new Test();
@@ -34,26 +40,22 @@ public class Test extends JFrame implements ActionListener {
     {
         setTitle("ToolBar Test");
         
+        initialLookAndFeel();
+        
         ResourceLocator.getInstance().addResourcePath("/org/tigris/toolbar/Images/");
 
         buildMenu();
 
         getContentPane().setLayout(new DockLayout());
         
-        // Add toolbars to the top
-        Object[] actions = {
-            new NewAction ("New",  ResourceLocator.getInstance().getIcon("New.gif")),
-            new OpenAction("Open", ResourceLocator.getInstance().getIcon("Open.gif")),
-            new SaveAction("Save", ResourceLocator.getInstance().getIcon("Save.gif"))
-        };
+        createApplicationToolbars(getContentPane());
 
-        for (int i=0; i<3; ++i) {
-            getContentPane().add(ToolBarFactory.createToolBar(true, "File", actions, true), DockLayout.NORTH);
-        }
-        
         // Add main panel to the centre
         getContentPane().add(MainPanel.getInstance(), DockLayout.CENTER);
         
+    }
+
+    private void initialLookAndFeel() {
         // Set initial look and feel
         //try {
         //    UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -68,7 +70,7 @@ public class Test extends JFrame implements ActionListener {
         getContentPane().invalidate();
         validate();
     }
-
+    
     private void buildMenu() {
         JMenuBar menuBar = new JMenuBar();
         JMenu lnfMenu = new JMenu("Look and Feel");
@@ -123,5 +125,27 @@ public class Test extends JFrame implements ActionListener {
         SwingUtilities.updateComponentTreeUI(this);
         getContentPane().invalidate();
         validate();
+        createApplicationToolbars(getContentPane());
+        CanvasPanel.getInstance().createToolBar();
+    }
+    
+    private void createApplicationToolbars(Container pane) {
+        Object[] actions = {
+            new NewAction ("New",  ResourceLocator.getInstance().getIcon("New.gif")),
+            new OpenAction("Open", ResourceLocator.getInstance().getIcon("Open.gif")),
+            new SaveAction("Save", ResourceLocator.getInstance().getIcon("Save.gif"))
+        };
+
+        if (fileToolBar1 != null) remove(fileToolBar1);
+        if (fileToolBar1 != null) remove(fileToolBar2);
+        if (fileToolBar1 != null) remove(fileToolBar3);
+        
+        fileToolBar1 = ToolBarFactory.createToolBar(true, "File", actions, true);
+        fileToolBar2 = ToolBarFactory.createToolBar(true, "File", actions, true);
+        fileToolBar3 = ToolBarFactory.createToolBar(true, "File", actions, true);
+        
+        pane.add(fileToolBar1, DockLayout.NORTH);
+        pane.add(fileToolBar2, DockLayout.NORTH);
+        pane.add(fileToolBar3, DockLayout.NORTH);
     }
 }

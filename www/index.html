@@ -3,93 +3,64 @@
 </head>
 <body>
 
-<p>This is the initial web content for your project.  Please customize
-this to fit your project.  You dont need to anwser all these questions
-or follow this exact format, but we do like to see this kind of
-information before we approve projects for public viewing.
+<p>ToolBar was originally designed for the ArgoUML project and has now been broken out to
+allow reuse by other swing based applications.
 </p>
 
-<p>Until your project is approved, only you can view it and work on
-it.
-</p>
-
+<p>ToolBar comes with -
 <ul>
-<li>This index.html will be used if and only if you have the "Use
-Project Home Page" option checked on the "Adminster Project" page
-(click the "Admin" tab).</li>
-
-<li>To edit this file, check out your project via CVS and edit www/index.html.
-
-<li>You can 'cvs add' and commit other files under the project's "www"
-directory and they will published to your project web site.</li>
-
-<li>Also, consider starting a thread in the "dev" mailing list to get
-thes discussion started.  A good one is an "introduction" thread where
-people post messages about themselves and their interest in the
-project.</li>
-
-<li>You can add a "Highlights:" line to the top of all web pages by adding a file www/project_highlights.html </li>
+<li>
+    a ToolBarManager to allow changes in look and feel to be
+    broadcast to all toolbars in your application.
+</li>
+<li>
+    a ToolBar class (extending JToolBar) which allows building of specialist buttons from the
+    <a href="http://www.toolbutton.tigris.org">ToolButton</a> project
+</li>
+<li>
+    a layout manager that allows toolbars to be docked to any edge of your 
+    application window.
+</li>
 </ul>
-
+</p>
 
 <h3>Mission</h3>
 
-<p>What is the goal of this project?
-</p>
+<p>To extend and improve upon the standard swing JToolBar features while keeping the
+platform independant features of swing.</p>
+<p>Application developers should be able to replace JToolBar with ToolBar with
+minimum program changes (construction only)</p>
 
-<p>What is the scope of this project?
-</p>
+<p>What is the scope of this project?</p>
+<p>Building and manipulting toolbars.</p>
 
-<p>For example:</p>
-
-<ul>
-<li>Develop just enough functionality to scratch a particular itch</li>
-<li>Build a tool just like XYZ, but less broken</li>
-<li>Build the best XYZ-tool ever!</li>
-</ul>
-
-
-<p>What are high-level features you are sure to build?
-</p>
-<ul>
-
-<li>What would you write on a billboard about your project? Users
-might only look for a few seconds.</li>
-
-<li>Use the issue tracker to track features and enhancement
-requests. It is not just for bugs, pre-populate it with feature
-descriptions so that potential contributors know what you would like them
-to work on.</li>
-</ul>
-
-<p>What are the high-level assumptions or ground rules for the project?
-</p>
-
-<p>For example:
-</p>
+<p>Assumptions</p>
 
 <ul>
-<li> we will use programming language X on operating system Y for now.
-
-<li>We will, or will not, consider certain functional areas like
-internationalization, high security, concurrency, etc.  The list of
-functional areas will depend on what you are trying to do.
-
-<li>Try to keep this part short.
+    <li>ToolBar shall be Java2 compliant JDK1.2 and above</li>
+    <li>
+        ToolBar shall always extend the standard swing component JToolBar to ensure
+        easy replacement in existing swing applications
+    </li>
+    <li>
+        The Metal look and feel will be supported together with the native look
+        and feel provided by the JRE.
+    </li>
 </ul>
 
 
 <h3>Related resources</h3>
 
 <ul>
-<li>Link to other stuff that you know about.  It will help you
-research requirements and provide a useful resource to potential
-contributors.</li>
-
-<li>Why reinvent the wheel? What is better about this wheel?  Is there
-any existing project that you can partner with or reuse?</li>
-
-<li>Where would you go to try to find potential contibutors?</li>
+    <li>
+        ToolBar makes use of the <a href="http://www.toolbutton.tigris.org">ToolButton</a>
+        project
+    </li>
+    <li>
+        ToolBar was initially created as an additional component to
+        <a href="http://www.argouml.tigris.org">ArgoUML</a>.
+        Initial development of ToolBar will be steered by the requirements of ArgoUML.
+    </li>
 </ul>
 
 </body>

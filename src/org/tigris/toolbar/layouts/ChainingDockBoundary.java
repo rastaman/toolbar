@@ -1,5 +1,5 @@
 /*
- *  WrappingDockBoundary.java
+ *  ChainingDockBoundary.java
  *  2004-01-02
  */
 
@@ -12,12 +12,12 @@ import java.util.*;
 
 
 /**
- * A DockBoundary that automatically wraps the docked toolbars
- * when they don't all fit on the same row.
+ * A simple DockBoundary that chains the docked toolbars
+ * along a single row.
  * @author Christopher Bach
  */
 // package access only...
-class WrappingDockBoundary extends DockBoundary
+class ChainingDockBoundary extends DockBoundary
 {
 
     private boolean         ourLayoutReflects = false;
@@ -27,9 +27,9 @@ class WrappingDockBoundary extends DockBoundary
 
 
     /**
-     * Creates a WrappingDockBoundary for the specified edge.
+     * Creates a ChainingDockBoundary for the specified edge.
      */
-    public WrappingDockBoundary(int edge)
+    public ChainingDockBoundary(int edge)
     {
         super(edge);
         ourLayoutReflects = (edge == DockLayout.SOUTH
@@ -38,10 +38,10 @@ class WrappingDockBoundary extends DockBoundary
 
 
     /**
-     * Creates a WrappingDockBoundary for the specified edge
+     * Creates a ChainingDockBoundary for the specified edge
      * with the provided spacing.
      */
-    public WrappingDockBoundary(int edge, int spacing)
+    public ChainingDockBoundary(int edge, int spacing)
     {
         super(edge, spacing);
         ourLayoutReflects = (edge == DockLayout.SOUTH
@@ -150,7 +150,6 @@ class WrappingDockBoundary extends DockBoundary
         JToolBar[] bars = getToolBars();
         int barDepth = getPreferredDepth();
         int barLength = 0;
-        int totalBarDepth = barDepth;
         int totalBarLength = 0;
 
         for (int i=0; i < bars.length; i++)
@@ -162,26 +161,13 @@ class WrappingDockBoundary extends DockBoundary
             if (totalBarLength != 0) totalBarLength += spacing;
 
             setToolBarBounds(toolbar, totalBarLength,
-                    totalBarDepth - barDepth,
-                    Math.min(barLength, length), barDepth);
-
+                    0, Math.min(barLength, length), barDepth);
 
             totalBarLength += barLength;
 
-            if (totalBarLength > length && i > 0)
-            {
-                // Need to move the current toolbar to the
-                // next row and start totalling the length anew.
-                totalBarDepth += barDepth + spacing;
-                totalBarLength = 0;
-                setToolBarBounds(toolbar, totalBarLength,
-                    totalBarDepth - barDepth,
-                    Math.min(barLength, length), barDepth);
-                totalBarLength = barLength;
-            }
         }
 
-        setDepth(totalBarDepth);
+        setDepth(barDepth);
     }
 
 

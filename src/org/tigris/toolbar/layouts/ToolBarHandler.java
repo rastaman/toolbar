@@ -1,6 +1,6 @@
 /*
  *  ToolBarHandler.java
- *  2003-12-23
+ *  2004-01-02
  */
 
 
@@ -39,7 +39,9 @@ class ToolBarHandler
     private ToolBarDragListener         ourDragListener = null;
     private UIChangeListener            ourUIListener = null;
 
+    private boolean                     ourToolBarIsDragging = false;
     private boolean                     ourToolBarShouldFloat = false;
+    private static boolean              ourVersionIsCompatible = false;
 
     public static final String          TOOL_BAR_HANDLER_KEY = "ToolBarHandler";
 
@@ -56,25 +58,51 @@ class ToolBarHandler
         ourToolBar = toolbar;
         ourDockLayout = layout;
 
-        ourDragListener = new ToolBarDragListener();
-        ourUIListener = new UIChangeListener();
+
+        // Initially the value of the static variable ourVersionIsCompatible is
+        // false so that for compatible versions (1.3 and above) this check is
+        // only performed once...
+        if (!ourVersionIsCompatible)
+        {
+            String specVersion = System.getProperty("java.specification.version");
+            try
+            {
+                float ver = Float.parseFloat(specVersion);
+                if (ver > 1.2f) ourVersionIsCompatible = true;
+            }
+
+            catch(Exception ex)
+            {
+                // Assume the version is not high enough,
+                // leave ourVersionIsCompatible = false
+            }
+        }
 
 
-        // Remove UI mouse listeners and replace with our own listeners...
-        installListeners();
+        if (ourVersionIsCompatible)
+        {
+            ourDragListener = new ToolBarDragListener();
+            ourUIListener = new UIChangeListener();
+            installListeners();
 
 
-        // Create a frame for floating this toolbar...
-        Window w = SwingUtilities.getWindowAncestor(
-                                    ourDockLayout.getTargetContainer());
-        Frame fr = null;
-        if (w instanceof Frame) fr = (Frame)w;
-        ourFloatFrame = new JDialog(fr);
-        ourFloatFrame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
-        ourFloatFrame.addWindowListener(new FloatFrameCloseListener());
-        ourFloatFrame.getContentPane().setLayout(new BorderLayout());
-        ourFloatFrame.setTitle(ourToolBar.getName());
-        ourFloatFrame.setResizable(false);
+            Window w = SwingUtilities.getWindowAncestor(
+                                ourDockLayout.getTargetContainer());
+
+            // Create a frame for floating this toolbar...
+            Frame fr = null;
+            if (w instanceof Frame) fr = (Frame)w;
+            ourFloatFrame = new JDialog(fr);
+            ourFloatFrame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+            ourFloatFrame.addWindowListener(new FloatFrameCloseListener());
+            ourFloatFrame.getContentPane().setLayout(new BorderLayout());
+            ourFloatFrame.setTitle(ourToolBar.getName());
+            ourFloatFrame.setResizable(false);
+
+
+            // Create a window to show when dragging this toolbar...
+            ourDraggingWindow = new DraggingWindow(w);
+        }
     }
 
 
@@ -253,18 +281,7 @@ class ToolBarHandler
         ourConstraints.setRow(row);
         ourConstraints.setIndex(index);
 
-        String edgeName = DockLayout.north;
-
-        if (edge == DockLayout.SOUTH)
-                edgeName = DockLayout.south;
-
-        else if (edge == DockLayout.EAST)
-                edgeName = DockLayout.east;
-
-        else if (edge == DockLayout.WEST)
-                edgeName = DockLayout.west;
-
-        target.add(ourToolBar, edgeName);
+        target.add(ourToolBar, ourConstraints);
         ourToolBarShouldFloat = false;
 
         target.validate();
@@ -400,7 +417,7 @@ class ToolBarHandler
      * Gets the nearest dockable DockBoundary for the specified point,
      * or returns null if the point is not a dockable location.
      */
-    protected DockBoundary getDockableBoundary(Point point)
+    private DockBoundary getDockableBoundary(Point point)
     {
         return ourDockLayout.getDockableBoundary(point);
     }
@@ -414,7 +431,7 @@ class ToolBarHandler
      * of the toolbars without this handler having to undock and
      * redock the toolbar.
      */
-    protected boolean isDraggable(Point point, JToolBar toolbar)
+    private boolean isDraggable(Point point, JToolBar toolbar)
     {
         if (toolbar == null) return false;
 
@@ -451,12 +468,18 @@ class ToolBarHandler
 
 
 
+
+
+
     /**
      * Strips off the UI's mouse listeners attached to the associated toolbar
      * and replaces them with this handler's listeners.
      */
     private void installListeners()
     {
+        if (!ourVersionIsCompatible) return;
+
+
         ourToolBar.removePropertyChangeListener("UI", ourUIListener);
 
         // Uninstall the current ui, collect the remaining listeners
@@ -520,7 +543,6 @@ class ToolBarHandler
 
 
 
-
     /**
      * Inner class that monitors the float frame for closing.
      */
@@ -559,6 +581,8 @@ class ToolBarHandler
 
 
 
+
+
     /**
      * Inner class that replaces the associated toolbar's mouse
      * listeners and handles the drag and drop behavior.
@@ -567,6 +591,9 @@ class ToolBarHandler
     {
         public void mouseDragged(MouseEvent me)
         {
+            if (ourDraggingWindow == null) return;
+
+
             // Only allow Button 1 to perform the drag...
             if ((me.getModifiers() & me.BUTTON1_MASK) != me.BUTTON1_MASK)
             {
@@ -592,15 +619,6 @@ class ToolBarHandler
             }
 
 
-            // Ensure that the dragging window exists...
-            if (ourDraggingWindow == null)
-            {
-                Window ancestorWindow =
-                    SwingUtilities.getWindowAncestor(ourToolBar);
-                ourDraggingWindow = new DraggingWindow(ancestorWindow);
-            }
-
-
             // Determine if this point lies within a
             // DockBoundary's dockable range...
             int orient = DockLayout.HORIZONTAL;
@@ -621,6 +639,7 @@ class ToolBarHandler
             // Present the dragging window at this point on the screen...
             SwingUtilities.convertPointToScreen(p, target);
             ourDraggingWindow.presentWindow(p, dockable, orient);
+            ourToolBarIsDragging = true;
 
         }
 
@@ -633,7 +652,8 @@ class ToolBarHandler
 
         public void mouseReleased(MouseEvent me)
         {
-            if (ourDraggingWindow == null) return;
+            if (!ourToolBarIsDragging) return;
+
 
             if ((me.getModifiers() & me.BUTTON1_MASK) != me.BUTTON1_MASK)
             {
@@ -686,7 +706,7 @@ class ToolBarHandler
             if (ourDraggingWindow != null)
             {
                 ourDraggingWindow.hideWindow();
-                ourDraggingWindow = null;
+                ourToolBarIsDragging = false;
             }
         }
 
@@ -820,6 +840,8 @@ class ToolBarHandler
 
 
     }
+
+
 
 
 

@@ -23,19 +23,12 @@ public class ToolBarFactory {
 
     public static JToolBar createToolBar(Object actions[]) {
         JToolBar tb = new ToolBar();
-        addActionsToToolBar(tb, actions);
+        addActionsToToolBar(tb, actions, false);
         return tb;
     }
     
     public static JToolBar createToolBar(boolean rollover, Object actions[]) {
-        JToolBar tb = new ToolBar();
-        if (rollover) {
-            tb.putClientProperty("JToolBar.isRollover",  Boolean.TRUE);
-        } else {
-            tb.putClientProperty("JToolBar.isRollover",  Boolean.FALSE);
-        }
-        addActionsToToolBar(tb, actions);
-        return tb;
+        return createToolBar(rollover, actions, true);
     }
     
     public static JToolBar createToolBar(boolean rollover, Object actions[], boolean floatable) {
@@ -46,14 +39,14 @@ public class ToolBarFactory {
             tb.putClientProperty("JToolBar.isRollover",  Boolean.FALSE);
         }
         tb.setFloatable(floatable);
-        addActionsToToolBar(tb, actions);
+        addActionsToToolBar(tb, actions, rollover);
         return tb;
     }
     
     public static JToolBar createToolBar(String name, Object actions[]) {
         JToolBar tb = new ToolBar();
         tb.setName(name);
-        addActionsToToolBar(tb, actions);
+        addActionsToToolBar(tb, actions, false);
         return tb;
     }
     
@@ -61,7 +54,7 @@ public class ToolBarFactory {
         JToolBar tb = new ToolBar(name);
         tb.setName(name);
         tb.setFloatable(floatable);
-        addActionsToToolBar(tb, actions);
+        addActionsToToolBar(tb, actions, false);
         return tb;
     }
     
@@ -74,7 +67,7 @@ public class ToolBarFactory {
         }
         tb.setName(name);
         tb.setFloatable(floatable);
-        addActionsToToolBar(tb, actions);
+        addActionsToToolBar(tb, actions, rollover);
         return tb;
     }
     
@@ -82,7 +75,7 @@ public class ToolBarFactory {
      * <p>Initialize the toolbar with buttons required for a specific diagram</p>
      * @param toolBar The toolbar to which to add the buttons.
      */
-    private static void addActionsToToolBar(JToolBar toolBar, Object actions[]) {
+    private static void addActionsToToolBar(JToolBar toolBar, Object actions[], boolean rollover) {
         
         for (int i=0; i < actions.length; ++i) {
             Object o = actions[i];
@@ -92,20 +85,20 @@ public class ToolBarFactory {
                 toolBar.add((Action)o);
             } else if (o instanceof Object[]) {
                 Object[] subActions = (Object[])o;
-                toolBar.add(buildPopupToolBoxButton(subActions));
+                toolBar.add(buildPopupToolBoxButton(subActions, rollover));
             } else if (o instanceof Component) {
                 toolBar.add((Component)o);
             }
         }
     }
 
-    private static PopupToolBoxButton buildPopupToolBoxButton(Object[] actions) {
+    private static PopupToolBoxButton buildPopupToolBoxButton(Object[] actions, boolean rollover) {
         PopupToolBoxButton toolBox = null;
         for (int i=0; i < actions.length; ++i) {
             if (actions[i] instanceof Action) {
                 Action a = (Action)actions[i];
                 if (toolBox == null) {
-                    toolBox = new PopupToolBoxButton(a, 0, 1);
+                    toolBox = new PopupToolBoxButton(a, 0, 1, rollover);
                 }
                 toolBox.add(a);
             } else if (actions[i] instanceof Object[]) {
@@ -114,7 +107,7 @@ public class ToolBarFactory {
                     Action a = (Action)actionRow[j];
                     if (toolBox == null) {
                         int cols = actionRow.length;
-                        toolBox = new PopupToolBoxButton(a, 0, cols);
+                        toolBox = new PopupToolBoxButton(a, 0, cols, rollover);
                     }
                     toolBox.add(a);
                 }

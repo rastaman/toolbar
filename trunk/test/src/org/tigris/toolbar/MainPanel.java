@@ -28,7 +28,6 @@ public class MainPanel extends javax.swing.JPanel {
     
     /** Creates a new instance of MainPanel */
     private MainPanel() {
-        //setLayout(new BorderLayout());
         JPanel infoPanels = new JPanel(new GridLayout());
         infoPanels.add(CommandQueuePanel.getInstance());
         infoPanels.add(LogPanel.getInstance());

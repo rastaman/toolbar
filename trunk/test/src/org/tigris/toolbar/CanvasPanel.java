@@ -136,9 +136,14 @@ public class CanvasPanel extends JPanel {
         }
         
         public void actionPerformed(java.awt.event.ActionEvent actionEvent) {
-            JButton button = (JButton)actionEvent.getSource();
-            button.setIcon(selectedIcon);
-            if (!modeLocked) deselectOtherTools(selectAction);
+            if (selectedIcon != null) {
+                JButton button = (JButton)actionEvent.getSource();
+                button.setIcon(selectedIcon);
+                if (!modeLocked) {
+                    deselectOtherTools(selectAction);
+                    selectedIcon = null;
+                }
+            }
         }
     }
     

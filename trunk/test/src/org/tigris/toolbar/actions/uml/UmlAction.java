@@ -19,9 +19,6 @@ import org.tigris.toolbutton.ResourceLocator;
  */
 public abstract class UmlAction extends AbstractButtonAction {
 
-    private static UmlAction lastAction = null;
-    private long lastActioned = 0;
-    
     public UmlAction(String name) {
         super(name, ResourceLocator.getInstance().getIcon(name + ".gif"));
     }

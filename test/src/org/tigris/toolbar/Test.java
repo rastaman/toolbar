@@ -23,11 +23,10 @@ public class Test extends JFrame implements ActionListener {
     JToolBar fileToolBar1;
     JToolBar fileToolBar2;
     JToolBar fileToolBar3;
+
+    String javaVersion;
     
     public static void main(String[] args) {
-        System.out.println(System.getProperties());
-        String javaVersion = System.getProperties().getProperty("java.specification.version");
-        System.out.println(javaVersion);
         JFrame f = new Test();
         f.addWindowListener( new WindowAdapter() {
             public void windowClosing(WindowEvent we) {
@@ -41,6 +40,8 @@ public class Test extends JFrame implements ActionListener {
 
     public Test()
     {
+        javaVersion = System.getProperties().getProperty("java.specification.version");
+        
         setTitle("ToolBar Test");
         
         initialLookAndFeel();
@@ -119,17 +120,24 @@ public class Test extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent ae) {
         JMenuItem item = (JMenuItem)ae.getSource();
         String lookAndFeelName = item.getActionCommand();
-        System.out.println(lookAndFeelName);
         String lookAndFeelClassName = getLookAndFeelClassName(lookAndFeelName);
-        System.out.println(lookAndFeelClassName);
+        if (!javaVersion.equals("1.3")) {
+            setLookAndFeel(getLookAndFeelClassName(item.getActionCommand()));
+        }
+        createApplicationToolbars(getContentPane());
+        CanvasPanel.getInstance().createToolBar();
+        if (javaVersion.equals("1.3")) {
+            setLookAndFeel(getLookAndFeelClassName(item.getActionCommand()));
+        }
+    }
+    
+    private void setLookAndFeel(String lookAndFeelClassName) {
         try {
-            UIManager.setLookAndFeel(getLookAndFeelClassName(item.getActionCommand()));
+            UIManager.setLookAndFeel(lookAndFeelClassName);
         } catch (Exception ex) { }
         SwingUtilities.updateComponentTreeUI(this);
         getContentPane().invalidate();
         validate();
-        createApplicationToolbars(getContentPane());
-        CanvasPanel.getInstance().createToolBar();
     }
     
     private void createApplicationToolbars(Container pane) {

@@ -22,47 +22,44 @@ import org.tigris.toolbutton.ToolButton;
  */
 public class ToolBar extends JToolBar {
     
-    /** Creates a new instance of Toolbar
+    String javaVersion;
+
+    /** Creates a new instance of an un-named horizontal ToolBar
      */
     public ToolBar() {
-        super();
-        this.setMargin(new Insets(0,0,0,0));
+        this("");
     }
     
-    /** Creates a new instance of Toolbar
+    /** Creates a new instance of a horizontal ToolBar with the given name
+     * @param name the title to display while floating
      */
     public ToolBar(String name) {
-        super(name);
-        this.setMargin(new Insets(0,0,0,0));
+        this(name, HORIZONTAL);
     }
     
-    /** Creates a new instance of Toolbar
+    /** Creates a new instance of ToolBar with the given name and orientation
+     * @param name the title to display while floating
+     * @param orientation HORIZONTAL or VERTICAL
      */
     public ToolBar(String name, int orientation) {
         super(name, orientation);
+        javaVersion = System.getProperties().getProperty("java.specification.version");
         this.setMargin(new Insets(0,0,0,0));
     }
     
-    /** Creates a new instance of Toolbar with the given orientation
+    /** Creates a new instance of an un-named ToolBar with the given orientation
      * @param orientation HORIZONTAL or VERTICAL
      */
     public ToolBar(int orientation) {
-        super(orientation);
-        this.setMargin(new Insets(0,0,0,0));
+        this("", orientation);
     }
 
-    public void setRollover(boolean rollover) {
-        // TODO Check for JDK1.4 before calling super class setRollover
-        //super.setRollover(rollover);
-        //this._rollover = rollover;
-        // TODO Check for JDK1.4 before using Boolean.valueOf(rollover)
-        //this.putClientProperty("JToolBar.isRollover", Boolean.valueOf(rollover));
-        Boolean showRollover = Boolean.FALSE;
-        if (rollover) showRollover = Boolean.TRUE;
-        this.putClientProperty("JToolBar.isRollover",  showRollover);
-    }
-    
-    
+    /**
+     * Add a new button to the toolbar with properties based on
+     * the given action and triggering the given action.
+     * @param action the action from which to create the button
+     * @return the resulting <code>JButton</code> class
+     */
     public JButton add(Action action) {
         JButton button;
 
@@ -76,8 +73,11 @@ public class ToolBar extends JToolBar {
             button = new ModalButton(action);
             add(button);
         }
-        // This is needed specifically for JDK1.3 on Windows & Motif
-        button.setMargin(new Insets(0,0,0,0));
+        if (javaVersion.equals("1.3")) {
+            button.setBorderPainted(false);
+            // This is needed specifically for JDK1.3 on Windows & Motif
+            button.setMargin(new Insets(0,0,0,0));
+        }
         return button;
     }
 }

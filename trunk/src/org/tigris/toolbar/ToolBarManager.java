@@ -7,8 +7,8 @@
 package org.tigris.toolbar;
 
 /**
- * The class exists to propogate change in toolbar settings to all toolbars
- * registered with it.
+ * This class exists to propogate change in toolbar settings (icon size etc)
+ * to all toolbars registered with it.
  *
  * @author Bob Tarling
  */

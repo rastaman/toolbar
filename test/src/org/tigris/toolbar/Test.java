@@ -6,6 +6,7 @@
 
 package org.tigris.toolbar;
 
+import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -21,7 +22,6 @@ import org.tigris.toolbar.actions.edit.CutAction;
 import org.tigris.toolbar.actions.edit.PasteAction;
 import org.tigris.toolbar.actions.edit.UndoAction;
 import org.tigris.toolbar.actions.edit.RedoAction;
-import org.tigris.toolbar.layouts.DockBorderLayout;
 import org.tigris.toolbar.layouts.DockLayout;
 import org.tigris.toolbar.toolbutton.ResourceLocator;
 
@@ -61,7 +61,7 @@ public class Test extends JFrame implements ActionListener {
         createApplicationToolbars(getContentPane());
 
         // Add main panel to the centre
-        getContentPane().add(MainPanel.getInstance(), DockBorderLayout.CENTER);
+        getContentPane().add(MainPanel.getInstance(), BorderLayout.CENTER);
         
     }
 

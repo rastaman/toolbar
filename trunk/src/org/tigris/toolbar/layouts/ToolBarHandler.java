@@ -1,6 +1,6 @@
 /*
  *  ToolBarHandler.java
- *  2004-01-02
+ *  2004-01-10
  */
 
 
@@ -84,24 +84,6 @@ class ToolBarHandler
             ourDragListener = new ToolBarDragListener();
             ourUIListener = new UIChangeListener();
             installListeners();
-
-
-            Window w = SwingUtilities.getWindowAncestor(
-                                ourDockLayout.getTargetContainer());
-
-            // Create a frame for floating this toolbar...
-            Frame fr = null;
-            if (w instanceof Frame) fr = (Frame)w;
-            ourFloatFrame = new JDialog(fr);
-            ourFloatFrame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
-            ourFloatFrame.addWindowListener(new FloatFrameCloseListener());
-            ourFloatFrame.getContentPane().setLayout(new BorderLayout());
-            ourFloatFrame.setTitle(ourToolBar.getName());
-            ourFloatFrame.setResizable(false);
-
-
-            // Create a window to show when dragging this toolbar...
-            ourDraggingWindow = new DraggingWindow(w);
         }
     }
 
@@ -233,8 +215,12 @@ class ToolBarHandler
     {
         Container target = ourDockLayout.getTargetContainer();
         target.remove(ourToolBar);
-        ourFloatFrame.setVisible(false);
-        ourFloatFrame.getContentPane().remove(ourToolBar);
+        JDialog floatFrame = getFloatingFrame();
+        if (floatFrame != null)
+        {
+            floatFrame.setVisible(false);
+            floatFrame.getContentPane().remove(ourToolBar);
+        }
 
         target.validate();
         target.repaint();
@@ -274,8 +260,12 @@ class ToolBarHandler
         if (target == null) return;
 
         target.remove(ourToolBar);
-        ourFloatFrame.setVisible(false);
-        ourFloatFrame.getContentPane().remove(ourToolBar);
+        JDialog floatFrame = getFloatingFrame();
+        if (floatFrame != null)
+        {
+            floatFrame.setVisible(false);
+            floatFrame.getContentPane().remove(ourToolBar);
+        }
 
         ourConstraints.setEdge(edge);
         ourConstraints.setRow(row);
@@ -320,25 +310,28 @@ class ToolBarHandler
      */
     public void floatToolBar(int x, int y, boolean center)
     {
+        JDialog floatFrame = getFloatingFrame();
+        if (floatFrame == null) return;
+
         Container target = ourDockLayout.getTargetContainer();
         if (target != null) target.remove(ourToolBar);
-        ourFloatFrame.setVisible(false);
-        ourFloatFrame.getContentPane().remove(ourToolBar);
+        floatFrame.setVisible(false);
+        floatFrame.getContentPane().remove(ourToolBar);
 
         ourToolBar.setOrientation(DockLayout.HORIZONTAL);
-        ourFloatFrame.getContentPane().add(ourToolBar, BorderLayout.CENTER);
-        ourFloatFrame.pack();
+        floatFrame.getContentPane().add(ourToolBar, BorderLayout.CENTER);
+        floatFrame.pack();
 
         if (center)
         {
-            x -= ourFloatFrame.getWidth() / 2;
-            y -= ourFloatFrame.getHeight() / 2;
+            x -= floatFrame.getWidth() / 2;
+            y -= floatFrame.getHeight() / 2;
         }
 
         // x and y are given relative to screen
-        ourFloatFrame.setLocation(x, y);
-        ourFloatFrame.setTitle(ourToolBar.getName());
-        ourFloatFrame.setVisible(true);
+        floatFrame.setLocation(x, y);
+        floatFrame.setTitle(ourToolBar.getName());
+        floatFrame.setVisible(true);
 
         ourToolBarShouldFloat = true;
 
@@ -371,7 +364,9 @@ class ToolBarHandler
      */
     public Point getFloatingLocation()
     {
-        return ourFloatFrame.getLocation();
+        JDialog floatFrame = getFloatingFrame();
+        if (floatFrame != null) return floatFrame.getLocation();
+        else return new Point(0, 0);
     }
 
 
@@ -381,7 +376,8 @@ class ToolBarHandler
      */
     public void setFloatingLocation(int x, int y)
     {
-        ourFloatFrame.setLocation(x, y);
+        JDialog floatFrame = getFloatingFrame();
+        if (floatFrame != null) floatFrame.setLocation(x, y);
     }
 
 
@@ -446,6 +442,49 @@ class ToolBarHandler
 
 
 
+    /**
+     * Returns the client frame for supporting the floating toolbar.
+     */
+    private JDialog getFloatingFrame()
+    {
+        if (ourFloatFrame == null)
+        {
+            Window w = SwingUtilities.getWindowAncestor(
+                                ourDockLayout.getTargetContainer());
+
+            if (w == null) return null;
+
+            Frame fr = null;
+            if (w instanceof Frame) fr = (Frame)w;
+            ourFloatFrame = new JDialog(fr);
+            ourFloatFrame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+            ourFloatFrame.addWindowListener(new FloatFrameCloseListener());
+            ourFloatFrame.getContentPane().setLayout(new BorderLayout());
+            ourFloatFrame.setTitle(ourToolBar.getName());
+            ourFloatFrame.setResizable(false);
+        }
+
+        return ourFloatFrame;
+    }
+
+
+
+    /**
+     * Returns a temporary window to display which represents the estimated
+     * bounds of the toolbar while it is being dragged.
+     */
+    private DraggingWindow getDraggingWindow()
+    {
+        if (ourDraggingWindow == null)
+        {
+            Window w = SwingUtilities.getWindowAncestor(
+                    ourDockLayout.getTargetContainer());
+
+            if (w != null) ourDraggingWindow = new DraggingWindow(w);
+        }
+
+        return ourDraggingWindow;
+    }
 
 
 
@@ -591,8 +630,8 @@ class ToolBarHandler
     {
         public void mouseDragged(MouseEvent me)
         {
+            ourDraggingWindow = getDraggingWindow();
             if (ourDraggingWindow == null) return;
-
 
             // Only allow Button 1 to perform the drag...
             if ((me.getModifiers() & me.BUTTON1_MASK) != me.BUTTON1_MASK)

@@ -22,6 +22,7 @@ import java.awt.event.MouseEvent;
 
 import javax.swing.ButtonModel;
 import javax.swing.UIManager;
+import javax.swing.event.MouseInputAdapter;
 
 /** 
  * An extension of JButton to which alternative actions can be added.
@@ -124,7 +125,7 @@ public class PopupToolBoxButton extends ToolButton {
     
     /**
      * Get the xy position of the icon.
-     * FIXME
+     * TODO
      * For the moment this assumes that the button has the icon centered.
      */
     private int getIconPosn() {
@@ -135,12 +136,6 @@ public class PopupToolBoxButton extends ToolButton {
 
     public void paint(Graphics g) {
         super.paint(g);
-//        Color[] colors = {
-//            getBackground(),
-//            MetalLookAndFeel.getPrimaryControlDarkShadow(),
-//            MetalLookAndFeel.getPrimaryControlInfo(),
-//            MetalLookAndFeel.getPrimaryControlHighlight()
-//        };
         Color[] colors = {
 	    getBackground(),
 	    UIManager.getColor("controlDkShadow"),
@@ -178,10 +173,7 @@ public class PopupToolBoxButton extends ToolButton {
         }
     }
     
-    private class MyMouseListener implements MouseMotionListener, MouseListener {
-
-        public void mouseDragged(MouseEvent me) {
-        }
+    private class MyMouseListener extends MouseInputAdapter {
 
         /**
          * If the mouse movement occurs within the PopupToolBoxButton.
@@ -208,22 +200,5 @@ public class PopupToolBoxButton extends ToolButton {
         public void mouseExited(MouseEvent me) {
             showSplitter(false);
         }
-        
-        public void mouseClicked(MouseEvent me) {
-        }
-        
-        /**
-         * Empty method to satisy interface only, there is no special
-         * action to take place when the mouse is pressed on the
-         * PopupToolBoxButton area
-         */
-        public void mousePressed(MouseEvent me) {}
-        
-        /**
-         * Empty method to satisy interface only, there is no special
-         * action to take place when the mouse is released on the
-         * PopupToolBoxButton area
-         */
-        public void mouseReleased(MouseEvent me) {}
     }
 }

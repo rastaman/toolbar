@@ -70,12 +70,6 @@ abstract public class DecoratedIcon extends ImageIcon {
         super.paintIcon(c, g, x, y);
 
         int xOffset = x + _imageIcon.getIconWidth() + _popupIconOffset;
-        // Initialize the color array
-//        Color[] colors = {
-//                c.getBackground(),
-//                MetalLookAndFeel.getPrimaryControlDarkShadow(),
-//                MetalLookAndFeel.getPrimaryControlInfo(),
-//                MetalLookAndFeel.getPrimaryControlHighlight()};
         Color[] colors = {
 	    c.getBackground(),
 	    UIManager.getColor("controlDkShadow"),

@@ -48,6 +48,9 @@ public class CanvasPanel extends JPanel {
         {new RadioAction(new AggregationAction()), new RadioAction(new UniAggregationAction())},
         {new RadioAction(new CompositionAction()), new RadioAction(new UniCompositionAction())}
     };
+
+    /** true if the canvas should not lose mode after being actioned */
+    private boolean modeLocked;
     
     private Object actions[] = {
         selectAction,
@@ -80,8 +83,9 @@ public class CanvasPanel extends JPanel {
         }
     }
     
-    public void setSelectedIcon(Icon selectedIcon) {
+    public void setSelectedIcon(Icon selectedIcon, boolean modeLocked) {
         this.selectedIcon = selectedIcon;
+        this.modeLocked = modeLocked;
     }
 
     /**
@@ -120,7 +124,11 @@ public class CanvasPanel extends JPanel {
             }
         }
     }
-    
+
+    /*
+     * This action is performed whenever the canvas is clicked and sets
+     * the clicked area to the current selected icon.
+     */
     class CanvasAction extends AbstractAction {
         
         CanvasAction() {
@@ -130,7 +138,7 @@ public class CanvasPanel extends JPanel {
         public void actionPerformed(java.awt.event.ActionEvent actionEvent) {
             JButton button = (JButton)actionEvent.getSource();
             button.setIcon(selectedIcon);
-            deselectOtherTools(selectAction);
+            if (!modeLocked) deselectOtherTools(selectAction);
         }
     }
     

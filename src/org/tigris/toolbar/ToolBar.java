@@ -12,6 +12,7 @@ import javax.swing.JButton;
 import javax.swing.JToolBar;
 import org.tigris.toolbutton.ModalAction;
 import org.tigris.toolbutton.ModalButton;
+import org.tigris.toolbutton.ToolButton;
 
 /**
  * A toolbar class which assumes rollover effects and automatically gives tooltip
@@ -71,9 +72,11 @@ public class ToolBar extends JToolBar {
             add(button);
         } else {
             //System.out.println("Adding action" + action);
-            button = super.add(action);
+            //button = super.add(action);
+            button = new ModalButton(action);
+            add(button);
         }
-        // This is needed specifically for JDK1.3 on Windows
+        // This is needed specifically for JDK1.3 on Windows & Motif
         button.setMargin(new Insets(0,0,0,0));
         return button;
     }

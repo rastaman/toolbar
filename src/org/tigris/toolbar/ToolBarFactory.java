@@ -204,7 +204,7 @@ public class ToolBarFactory {
             Object mi = menu.getMenuComponent(i);
             if (mi instanceof JMenuItem
                     && ((JMenuItem)mi).getIcon() != null) {
-                items[iconCount] = ((JMenuItem)mi).getAction();
+                items[iconCount++] = ((JMenuItem)mi).getAction();
             }
         }
         
@@ -235,8 +235,8 @@ public class ToolBarFactory {
                 Action a = (Action)o;
                 JButton button = toolBar.add(a);
                 if (button.getToolTipText() == null || button.getToolTipText().trim().length() == 0) {
-	                button.setToolTipText((String)a.getValue(Action.NAME));
-				}
+                    button.setToolTipText((String)a.getValue(Action.NAME));
+                }
             } else if (o instanceof Object[]) {
                 Object[] subActions = (Object[])o;
                 JButton button = buildPopupToolBoxButton(subActions, rollover);

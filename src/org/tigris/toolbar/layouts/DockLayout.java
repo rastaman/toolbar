@@ -7,11 +7,7 @@
 package org.tigris.toolbar.layouts;
 
 import java.awt.*;
-import java.awt.event.*;
-import java.util.*;
 import javax.swing.*;
-import javax.swing.event.*;
-
 
 /**
  * Class providing layout management to control positions of docked

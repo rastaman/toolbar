@@ -27,6 +27,7 @@ import org.tigris.toolbar.actions.uml.UniAggregationAction;
 import org.tigris.toolbar.actions.uml.UniAssociationAction;
 import org.tigris.toolbar.actions.uml.UniCompositionAction;
 import org.tigris.toolbutton.AbstractButtonAction;
+import org.tigris.toolbutton.ModalAction;
 import org.tigris.toolbutton.ResourceLocator;
 import org.tigris.toolbutton.ToolButton;
 
@@ -39,6 +40,8 @@ public class CanvasPanel extends JPanel {
     
     private static CanvasPanel instance = new CanvasPanel();
     
+    RadioAction selectAction = new RadioAction(new SelectAction());
+    
     Object associationActions[][] = {
         {new AssociationAction(), new UniAssociationAction()},
         {new AggregationAction(), new UniAggregationAction()},
@@ -46,12 +49,12 @@ public class CanvasPanel extends JPanel {
     };
     
     private Object actions[] = {
-        new SelectAction(),
-        new BroomAction(),
+        selectAction,
+        new RadioAction(new BroomAction()),
         null,
-        new PackageAction(),
-        new ClassAction(),
-        new InterfaceAction(),
+        new RadioAction(new PackageAction()),
+        new RadioAction(new ClassAction()),
+        new RadioAction(new InterfaceAction()),
         associationActions
     };
 
@@ -80,12 +83,25 @@ public class CanvasPanel extends JPanel {
         this.selectedIcon = selectedIcon;
     }
 
-    public void deselectOtherTools() {
+    /**
+     * Set all toolbar buttons to unselected other then the toolbar button
+     * with the supplied action.
+     */
+    public void deselectOtherTools(RadioAction otherThanAction) {
         int toolCount=toolBar.getComponentCount();
-        for (int i=1; i<toolCount; ++i) {
+        for (int i=0; i<toolCount; ++i) {
             Component c = toolBar.getComponent(i);
             if (c instanceof ToolButton) {
-                ((ToolButton)c).setSelected(false);
+                ToolButton tb = (ToolButton)c;
+                Action action = (Action)tb.getRealAction();
+                System.out.println("i =" + action);
+                System.out.println("s =" + otherThanAction);
+                if (action instanceof RadioAction) {
+                    action = ((RadioAction)action).getAction();
+                }
+                if (!action.equals(otherThanAction.getAction())) {
+                    ((ToolButton)c).setSelected(false);
+                }
             }
         }
     }
@@ -99,7 +115,27 @@ public class CanvasPanel extends JPanel {
         public void actionPerformed(java.awt.event.ActionEvent actionEvent) {
             JButton button = (JButton)actionEvent.getSource();
             button.setIcon(selectedIcon);
-            deselectOtherTools();
+            deselectOtherTools(selectAction);
+        }
+    }
+    
+    class RadioAction extends AbstractButtonAction {
+        
+        AbstractButtonAction realAction;
+        
+        RadioAction(AbstractButtonAction action) {
+            super(action.getName(), action.getIcon());
+            realAction = action;
+            action.getIcon();
+        }
+        
+        public void actionPerformed(java.awt.event.ActionEvent actionEvent) {
+            realAction.actionPerformed(actionEvent);
+            deselectOtherTools(this);
+        }
+        
+        public Action getAction() {
+            return realAction;
         }
     }
 }

@@ -16,7 +16,8 @@ import javax.swing.JToolBar;
 import org.tigris.toolbar.actions.file.NewAction;
 import org.tigris.toolbar.actions.file.OpenAction;
 import org.tigris.toolbar.actions.file.SaveAction;
-import org.tigris.toolbutton.ResourceLocator;
+import org.tigris.toolbar.layouts.DockBorderLayout;
+import org.tigris.toolbar.toolbutton.ResourceLocator;
 
 public class Test extends JFrame implements ActionListener {
 

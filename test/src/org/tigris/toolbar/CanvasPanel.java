@@ -27,10 +27,8 @@ import org.tigris.toolbar.actions.uml.SelectAction;
 import org.tigris.toolbar.actions.uml.UniAggregationAction;
 import org.tigris.toolbar.actions.uml.UniAssociationAction;
 import org.tigris.toolbar.actions.uml.UniCompositionAction;
-import org.tigris.toolbutton.AbstractButtonAction;
-import org.tigris.toolbutton.ModalAction;
-import org.tigris.toolbutton.ResourceLocator;
-import org.tigris.toolbutton.ToolButton;
+import org.tigris.toolbar.toolbutton.AbstractButtonAction;
+import org.tigris.toolbar.toolbutton.ToolButton;
 
 /**
  * An example canvas to demonstrate the previously selected actions

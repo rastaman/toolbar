@@ -16,8 +16,6 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
 import javax.swing.plaf.*;
-import javax.swing.plaf.basic.BasicToolBarUI;
-
 
 /**
  * Utilitiy class that replaces JToolBar's look and feel mouse listeners
@@ -810,7 +808,7 @@ class ToolBarHandler
             setCentroidLocation(screenPoint);
 
 
-            int tbOrientation = ourToolBar.getOrientation();
+            //int tbOrientation = ourToolBar.getOrientation();
             int orientation = (dockable ? dockOrientation
                                             : DockLayout.HORIZONTAL);
 

@@ -16,8 +16,6 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.event.MouseAdapter;
-import java.awt.event.MouseMotionListener;
-import java.awt.event.MouseListener;
 import java.awt.event.MouseEvent;
 
 import javax.swing.ButtonModel;

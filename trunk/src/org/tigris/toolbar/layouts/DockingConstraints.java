@@ -6,14 +6,6 @@
 
 package org.tigris.toolbar.layouts;
 
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
-import javax.swing.event.*;
-import java.util.*;
-
-
-
 /**
  * Class representing the edge and indicies at which a toolbar should be docked.
  * @author Christopher Bach

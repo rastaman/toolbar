@@ -125,8 +125,6 @@ public class Test extends JFrame implements ActionListener {
 
     public void actionPerformed(ActionEvent ae) {
         JMenuItem item = (JMenuItem)ae.getSource();
-        String lookAndFeelName = item.getActionCommand();
-        String lookAndFeelClassName = getLookAndFeelClassName(lookAndFeelName);
         if (!javaVersion.equals("1.3")) {
             setLookAndFeel(getLookAndFeelClassName(item.getActionCommand()));
         }

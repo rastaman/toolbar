@@ -23,6 +23,7 @@ public class Test extends JFrame implements ActionListener {
     JToolBar fileToolBar1;
     JToolBar fileToolBar2;
     JToolBar fileToolBar3;
+    JToolBar fileToolBar4;
 
     String javaVersion;
     
@@ -38,8 +39,7 @@ public class Test extends JFrame implements ActionListener {
         f.setVisible(true);
     }
 
-    public Test()
-    {
+    public Test() {
         javaVersion = System.getProperties().getProperty("java.specification.version");
         
         setTitle("ToolBar Test");
@@ -50,12 +50,12 @@ public class Test extends JFrame implements ActionListener {
 
         buildMenu();
 
-        getContentPane().setLayout(new DockLayout());
+        getContentPane().setLayout(new DockBorderLayout());
         
         createApplicationToolbars(getContentPane());
 
         // Add main panel to the centre
-        getContentPane().add(MainPanel.getInstance(), DockLayout.CENTER);
+        getContentPane().add(MainPanel.getInstance(), DockBorderLayout.CENTER);
         
     }
 
@@ -148,15 +148,21 @@ public class Test extends JFrame implements ActionListener {
         };
 
         if (fileToolBar1 != null) remove(fileToolBar1);
-        if (fileToolBar1 != null) remove(fileToolBar2);
-        if (fileToolBar1 != null) remove(fileToolBar3);
+        if (fileToolBar2 != null) remove(fileToolBar2);
+        if (fileToolBar3 != null) remove(fileToolBar3);
+        if (fileToolBar4 != null) remove(fileToolBar4);
         
         fileToolBar1 = ToolBarFactory.createToolBar(true, "File", actions, true);
         fileToolBar2 = ToolBarFactory.createToolBar(true, "File", actions, true);
         fileToolBar3 = ToolBarFactory.createToolBar(true, "File", actions, true);
+        fileToolBar4 = new ToolBar("File");
+        fileToolBar4.add(new NewAction ("New",  ResourceLocator.getInstance().getIcon("New.gif")));
+        fileToolBar4.add(new NewAction ("Open", ResourceLocator.getInstance().getIcon("Open.gif")));
+        fileToolBar4.add(new NewAction ("Save", ResourceLocator.getInstance().getIcon("Save.gif")));
         
-        pane.add(fileToolBar1, DockLayout.NORTH);
-        pane.add(fileToolBar2, DockLayout.NORTH);
-        pane.add(fileToolBar3, DockLayout.NORTH);
+        pane.add(fileToolBar1, DockBorderLayout.NORTH);
+        pane.add(fileToolBar2, DockBorderLayout.NORTH);
+        pane.add(fileToolBar3, DockBorderLayout.NORTH);
+        pane.add(fileToolBar4, DockBorderLayout.NORTH);
     }
 }

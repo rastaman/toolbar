@@ -9,6 +9,8 @@ package org.tigris.toolbar;
 import java.awt.Component;
 import javax.swing.Action;
 import javax.swing.JButton;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
 import javax.swing.JToolBar;
 import org.tigris.toolbar.toolbutton.PopupToolBoxButton;
 
@@ -115,6 +117,109 @@ public class ToolBarFactory {
     }
     
     /**
+     * <p>Create a new toolbar containing buttons and other controls based
+     * on the given menu.</p>
+     * <p>All JMenuItems contained in the JMenu are examined to see if they
+     * have an icon. If they do there actions are added to the toolbar.
+     * @param menu the menu of elements representing toolbar items
+     */
+    public static JToolBar createToolBar(JMenu menu) {
+        return createToolBar(false/*rollover*/, "", menu, true/*floatable*/);
+    }
+    
+    /**
+     * <p>Create a new toolbar containing buttons and other controls based
+     * on the given menu with the given rollover effect.</p>
+     * @param rollover true if buttons are to be shown with rollover effect
+     * @param menu the menu of elements representing toolbar items
+     */
+    public static JToolBar createToolBar(boolean rollover, JMenu menu) {
+        return createToolBar(rollover, menu, true/*floatable*/);
+    }
+    
+    /**
+     * <p>Create a new toolbar containing buttons and other controls based
+     * on the given menu with the given rollover effect and float style.</p>
+     * @param rollover true if buttons are to be shown with rollover effect
+     * @param menu the menu of elements representing toolbar items
+     * @param floatable true if the toolbar can be dragged into a floating
+     *                  position
+     */
+    public static JToolBar createToolBar(boolean rollover, JMenu menu, boolean floatable) {
+        return createToolBar(rollover, "", menu, floatable);
+    }
+    
+    /**
+     * <p>Create a new toolbar containing buttons and other controls based
+     * on the given menu with the given rollover effect and float style.</p>
+     * @param rollover true if buttons are to be shown with rollover effect
+     * @param menu the menu of elements representing toolbar items
+     * @param floatable true if the toolbar can be dragged into a floating
+     *                  position
+     */
+    public static JToolBar createToolBar(String name, JMenu menu) {
+        return createToolBar(false/*rollover*/, name, menu, true/*floatable*/);
+    }
+    
+    /**
+     * <p>Create a named toolbar containing buttons and other controls based
+     * on the given menu with the given rollover effect and float style.</p>
+     * @param name the name to place in the titlebar of the toolbar
+     * @param menu the menu of elements representing toolbar items
+     * @param floatable true if the toolbar can be dragged into a floating
+     *                  position
+     */
+    public static JToolBar createToolBar(String name, JMenu menu, boolean floatable) {
+        return createToolBar(false/*rollover*/, name, menu, floatable);
+    }
+    
+    /**
+     * <p>Create a named toolbar containing buttons and other controls based
+     * on the given menu with the given rollover effect and float style.</p>
+     * @param rollover true if buttons are to be shown with rollover effect
+     * @param name the name to place in the titlebar of the toolbar
+     * @param menu the menu of elements representing toolbar items
+     * @param floatable true if the toolbar can be dragged into a floating
+     *                  position
+     */
+    public static JToolBar createToolBar(boolean rollover, 
+                                         String name, 
+                                         JMenu menu, 
+                                         boolean floatable) {
+                                             
+        int count = menu.getMenuComponentCount();
+        int iconCount = 0;
+        for (int i=0; i < count; ++i) {
+            Object mi = menu.getMenuComponent(i);
+            if (mi instanceof JMenuItem
+                    && ((JMenuItem)mi).getIcon() != null) {
+                ++iconCount;
+            }
+        }
+        
+        Object[] items = new Action[iconCount];
+        
+        iconCount = 0;
+        for (int i=0; i < count; ++i) {
+            Object mi = menu.getMenuComponent(i);
+            if (mi instanceof JMenuItem
+                    && ((JMenuItem)mi).getIcon() != null) {
+                items[iconCount] = ((JMenuItem)mi).getAction();
+            }
+        }
+        
+        JToolBar tb = new ToolBar(name);
+        if (rollover) {
+            tb.putClientProperty("JToolBar.isRollover",  Boolean.TRUE);
+        } else {
+            tb.putClientProperty("JToolBar.isRollover",  Boolean.FALSE);
+        }
+        tb.setFloatable(floatable);
+        addItemsToToolBar(tb, items, rollover);
+        return tb;
+    }
+
+    /**
      * <p>Populate the toolbar with the specific widgets required</p>
      * @param toolBar The toolbar to which to add the buttons.
      * @param items the items on which to base the buttons
@@ -151,7 +256,7 @@ public class ToolBarFactory {
                 if (toolBox == null) {
                     toolBox = new PopupToolBoxButton(a, 0, 1, rollover);
                 }
-                JButton button = toolBox.add(a);
+                toolBox.add(a);
             } else if (actions[i] instanceof Object[]) {
                 Object[] actionRow = (Object[])actions[i];
                 for (int j=0; j < actionRow.length; ++j) {
@@ -160,7 +265,7 @@ public class ToolBarFactory {
                         int cols = actionRow.length;
                         toolBox = new PopupToolBoxButton(a, 0, cols, rollover);
                     }
-                    JButton button = toolBox.add(a);
+                    toolBox.add(a);
                 }
             }
         }

@@ -20,8 +20,8 @@ import javax.swing.JButton;
  */
 public class PopupToolBox extends ToolBox {
 
-    ArrayList _actions = new ArrayList();
-    MouseListener _mouseListener;
+    ArrayList actions = new ArrayList();
+    MouseListener mouseListener;
 
     /** Creates a new instance of PopupToolBox */
     public PopupToolBox(int rows, int cols) {
@@ -35,13 +35,13 @@ public class PopupToolBox extends ToolBox {
 
     public JButton add(Action action) {
         JButton button = super.add(action);
-        _actions.add(action);
+        actions.add(action);
         
         return button;
     }
 
     public void setButtonMouseListener(MouseListener mouseListener) {
-        _mouseListener = mouseListener;
+        this.mouseListener = mouseListener;
     }
 
     /**
@@ -51,13 +51,13 @@ public class PopupToolBox extends ToolBox {
      */
     public void rebuild() {
         super.removeAll();
-        Iterator it = _actions.iterator();
+        Iterator it = actions.iterator();
         while(it.hasNext()) {
             Action a = (Action)it.next();
             JButton button = super.add(a);
             button.setBorderPainted(false);
-            if (_mouseListener != null) {
-                button.addMouseListener(_mouseListener);
+            if (mouseListener != null) {
+                button.addMouseListener(mouseListener);
             }
         }
     }

@@ -20,7 +20,7 @@ import org.tigris.toolbutton.ResourceLocator;
 public class UmlAction extends AbstractButtonAction {
 
     public UmlAction(String name) {
-        super(name, ResourceLocator.getInstance().getIcon(name + ".gif"), true);
+        super(name, ResourceLocator.getInstance().getIcon(name + ".gif"));
     }
 
     public void actionPerformed(java.awt.event.ActionEvent actionEvent) {

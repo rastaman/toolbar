@@ -25,6 +25,9 @@ public class Test extends JFrame implements ActionListener {
     JToolBar fileToolBar3;
     
     public static void main(String[] args) {
+        System.out.println(System.getProperties());
+        String javaVersion = System.getProperties().getProperty("java.specification.version");
+        System.out.println(javaVersion);
         JFrame f = new Test();
         f.addWindowListener( new WindowAdapter() {
             public void windowClosing(WindowEvent we) {

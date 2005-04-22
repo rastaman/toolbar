@@ -632,7 +632,7 @@ class ToolBarHandler
             if (ourDraggingWindow == null) return;
 
             // Only allow Button 1 to perform the drag...
-            if ((me.getModifiers() & me.BUTTON1_MASK) != me.BUTTON1_MASK)
+            if ((me.getModifiers() & MouseEvent.BUTTON1_MASK) != MouseEvent.BUTTON1_MASK)
             {
                 hideDraggingWindow();
                 return;
@@ -692,7 +692,7 @@ class ToolBarHandler
             if (!ourToolBarIsDragging) return;
 
 
-            if ((me.getModifiers() & me.BUTTON1_MASK) != me.BUTTON1_MASK)
+            if ((me.getModifiers() & MouseEvent.BUTTON1_MASK) != MouseEvent.BUTTON1_MASK)
             {
                 return;
             }

@@ -8,8 +8,8 @@ package org.tigris.toolbar;
  * @stereotype utility
  */
 public class Version {
-	public static int RELEASE_NUMBER = 0;
-	public static int MAJOR_REVISION_NUMBER = 5;
+	public static int RELEASE_NUMBER = 1;
+	public static int MAJOR_REVISION_NUMBER = 0;
 	public static int MINOR_REVISION_NUMBER = 0;
 	private Version() {}
 	

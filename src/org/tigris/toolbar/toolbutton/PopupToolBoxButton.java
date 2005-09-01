@@ -34,7 +34,6 @@ public class PopupToolBoxButton extends ToolButton {
     private PopupToolBox _popupToolBox;
     private DecoratedIcon _standardIcon;
     private String tooltip;
-    private PopupToolBoxButton _this;
     private boolean _showSplitter;
     
     /** Creates a new instance of PopupToolboxButton
@@ -44,7 +43,6 @@ public class PopupToolBoxButton extends ToolButton {
      */
     public PopupToolBoxButton(Action a, int rows, int cols, boolean rollover) {
         super(a);
-        _this = this;
         setAction(a);
         
         _popupToolBox = new PopupToolBox(rows, cols, rollover);
@@ -92,6 +90,7 @@ public class PopupToolBoxButton extends ToolButton {
                 if (c instanceof ModalButton) {
                     Action a = ((ModalButton)c).getRealAction();
                     setAction(a);
+                    a.putValue("popped", Boolean.valueOf(true));
                     setSelected(true);
                     ButtonModel bm = getModel();
                     bm.setRollover(true);
@@ -114,6 +113,11 @@ public class PopupToolBoxButton extends ToolButton {
      * @return The button generated to trigger the action
      */    
     public JButton add(Action a) {
+        if (a.getValue("isDefault") instanceof Boolean) {
+            if(((Boolean)a.getValue("isDefault")).booleanValue()) {
+                setAction(a);
+            }
+        }
         return _popupToolBox.add(a);
     }
     

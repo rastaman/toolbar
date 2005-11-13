@@ -60,20 +60,10 @@ public class ToolBar extends JToolBar {
      * @return the resulting <code>JButton</code> class
      */
     public JButton add(Action action) {
-        JButton button;
-
-        if (action instanceof ModalAction) {
-            //System.out.println("Adding model action" + action);
-            button = new ModalButton(action);
-            add(button);
-        } else {
-            //System.out.println("Adding action" + action);
-            //button = super.add(action);
-            button = new ModalButton(action);
-            add(button);
-        }
+        JButton button = new ModalButton(action);
+        add(button);
+        button.setBorderPainted(false);
         if (javaVersion.equals("1.3")) {
-            button.setBorderPainted(false);
             // This is needed specifically for JDK1.3 on Windows & Motif
             button.setMargin(new Insets(0,0,0,0));
         }

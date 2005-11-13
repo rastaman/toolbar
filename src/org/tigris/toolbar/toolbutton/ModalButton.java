@@ -17,7 +17,6 @@ import javax.swing.JButton;
 public class ModalButton extends ToolButton {
 
     private String tooltip;
-    private ToolButtonAction stickyAction;
     
     /** Creates a new instance of PopupToolboxButton
      * @param a The default action when pressing this button

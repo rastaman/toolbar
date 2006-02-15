@@ -52,10 +52,16 @@ abstract public class AbstractButtonAction extends AbstractAction implements Mod
         long timeClicked = System.currentTimeMillis();
         if (lastClickedAction == this && (timeClicked - lastTimeClicked) < 1000) {
             doubleClick = true;
+            lastTimeClicked = timeClicked;
+            lastClickedAction = this;
         } else {
-            doubleClick = false;
+            if (doubleClick && lastClickedAction == this) {
+                lastClickedAction = null;
+                doubleClick = false;
+            } else {
+                lastTimeClicked = timeClicked;
+                lastClickedAction = this;
+            }
         }
-        lastTimeClicked = timeClicked;
-        lastClickedAction = this;
     }
 }

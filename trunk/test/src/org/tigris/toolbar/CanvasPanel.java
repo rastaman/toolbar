@@ -9,6 +9,8 @@ package org.tigris.toolbar;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.ButtonModel;
@@ -28,6 +30,7 @@ import org.tigris.toolbar.actions.uml.UniAggregationAction;
 import org.tigris.toolbar.actions.uml.UniAssociationAction;
 import org.tigris.toolbar.actions.uml.UniCompositionAction;
 import org.tigris.toolbar.toolbutton.AbstractButtonAction;
+import org.tigris.toolbar.toolbutton.ResourceLocator;
 import org.tigris.toolbar.toolbutton.ToolButton;
 
 /**
@@ -78,6 +81,17 @@ public class CanvasPanel extends JPanel {
         for (int i=0; i < 100; ++i) {
             canvas.add(new JButton(new CanvasAction()));
         }
+        JPanel standardToolbarPanel = new JPanel();
+        standardToolbarPanel.setLayout(new BorderLayout());
+        JToolBar standardToolbar = new JToolBar();
+        standardToolbarPanel.add(standardToolbar, BorderLayout.WEST);
+        add(standardToolbarPanel, BorderLayout.SOUTH);
+        standardToolbar.add(new EmptyAction("Copy", ResourceLocator.getInstance().getIcon("Copy.gif")));
+        standardToolbar.add(new EmptyAction("Copy", ResourceLocator.getInstance().getIcon("Copy.gif")));
+        standardToolbar.add(new EmptyAction("Copy", ResourceLocator.getInstance().getIcon("Copy.gif")));
+        standardToolbar.add(new EmptyAction("Copy", ResourceLocator.getInstance().getIcon("Copy.gif")));
+        standardToolbar.add(new EmptyAction("Copy", ResourceLocator.getInstance().getIcon("Copy.gif")));
+        standardToolbar.add(new EmptyAction("Copy", ResourceLocator.getInstance().getIcon("Copy.gif")));
     }
 
     public void createToolBar() {
@@ -89,6 +103,14 @@ public class CanvasPanel extends JPanel {
     public void setSelectedIcon(Icon selectedIcon, boolean modeLocked) {
         this.selectedIcon = selectedIcon;
         this.modeLocked = modeLocked;
+    }
+    
+    public boolean getModeLocked() {
+        return modeLocked;
+    }
+    
+    public Icon getSelectedIcon() {
+        return selectedIcon;
     }
 
     /**
@@ -169,6 +191,15 @@ public class CanvasPanel extends JPanel {
         
         public Action getAction() {
             return realAction;
+        }
+    }
+    
+    private class EmptyAction extends AbstractAction {
+        EmptyAction(String name, Icon icon) {
+            super(name, icon);
+        }
+
+        public void actionPerformed(ActionEvent e) {
         }
     }
 }

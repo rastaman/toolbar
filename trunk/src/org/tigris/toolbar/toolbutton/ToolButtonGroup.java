@@ -9,6 +9,8 @@ package org.tigris.toolbar.toolbutton;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import org.tigris.toolbar.ToolBarManager;
+
 /**
  * 
  *
@@ -31,13 +33,18 @@ public class ToolButtonGroup {
     
     public void buttonSelected(ToolButton toolButton) {
         Iterator it = buttons.iterator();
+        boolean alwaysShowBorder = ToolBarManager.alwaysUseStandardRollover();
         while (it.hasNext()) {
             ToolButton button = (ToolButton)it.next();
             if (button != toolButton) {
                 button.setSelected(false);
-                button.setBorderPainted(false);
+                if (alwaysShowBorder) {
+                    button.setBorderPainted(false);
+                }
             } else {
-                button.setBorderPainted(true);
+                if (alwaysShowBorder) {
+                    button.setBorderPainted(true);
+                }
             }
         }
     }

@@ -109,10 +109,12 @@ public class ToolBarFactory {
                                          Object items[], 
                                          boolean floatable) {
         JToolBar tb = new ToolBar(name);
-        if (rollover) {
-            tb.putClientProperty("JToolBar.isRollover",  Boolean.TRUE);
-        } else {
-            tb.putClientProperty("JToolBar.isRollover",  Boolean.FALSE);
+        if (!ToolBarManager.alwaysUseStandardRollover()) {
+            if (rollover) {
+                tb.putClientProperty("JToolBar.isRollover",  Boolean.TRUE);
+            } else {
+                tb.putClientProperty("JToolBar.isRollover",  Boolean.FALSE);
+            }
         }
         tb.setFloatable(floatable);
         addItemsToToolBar(tb, items, rollover);
@@ -366,7 +368,9 @@ public class ToolBarFactory {
         } else if (item instanceof Object[]) {
             Object[] subActions = (Object[])item;
             JButton button = buildPopupToolBoxButton(subActions, rollover);
-            button.setBorderPainted(false);
+            if (ToolBarManager.alwaysUseStandardRollover()) {
+                button.setBorderPainted(false);
+            }
             toolBar.add(button);
         } else if (item instanceof Component) {
             toolBar.add((Component)item);

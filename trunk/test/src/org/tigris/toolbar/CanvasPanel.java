@@ -140,13 +140,17 @@ public class CanvasPanel extends JPanel {
                     bm.setSelected(false);
                     bm.setArmed(false);
                     bm.setPressed(false);
-                    tb.setBorderPainted(false);
+                    if (!ToolBarManager.alwaysUseStandardRollover()) {
+                        tb.setBorderPainted(false);
+                    }
                 } else {
                     //System.out.println("Selecting " + tb);
                     tb.setSelected(true);
                     ButtonModel bm = tb.getModel();
                     bm.setRollover(true);
-                    tb.setBorderPainted(true);
+                    if (!ToolBarManager.alwaysUseStandardRollover()) {
+                        tb.setBorderPainted(true);
+                    }
                 }
             }
         }

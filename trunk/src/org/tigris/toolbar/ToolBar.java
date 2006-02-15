@@ -10,7 +10,6 @@ import java.awt.Insets;
 import javax.swing.Action;
 import javax.swing.JButton;
 import javax.swing.JToolBar;
-import org.tigris.toolbar.toolbutton.ModalAction;
 import org.tigris.toolbar.toolbutton.ModalButton;
 
 /**
@@ -62,7 +61,9 @@ public class ToolBar extends JToolBar {
     public JButton add(Action action) {
         JButton button = new ModalButton(action);
         add(button);
-        button.setBorderPainted(false);
+        if (ToolBarManager.alwaysUseStandardRollover()) {
+            button.setBorderPainted(false);
+        }
         if (javaVersion.equals("1.3")) {
             // This is needed specifically for JDK1.3 on Windows & Motif
             button.setMargin(new Insets(0,0,0,0));

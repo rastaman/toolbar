@@ -16,6 +16,8 @@ import javax.swing.Action;
 import javax.swing.JButton;
 import javax.swing.UIManager;
 
+import org.tigris.toolbar.ToolBarManager;
+
 /** 
  * An extension of JButton which gives rollover effect for all plafs. Even
  * those not provided for in JDK1.3
@@ -103,7 +105,7 @@ public class ToolButton extends JButton {
          * PopupToolBoxButton area
          */
         public void mouseEntered(MouseEvent me) {
-            if (getRealAction().isEnabled()) {
+            if (getRealAction().isEnabled() && !ToolBarManager.alwaysUseStandardRollover()) {
                 setBorderPainted(true);
             }
         }
@@ -113,10 +115,7 @@ public class ToolButton extends JButton {
          * button.
          */
         public void mouseExited(MouseEvent me) {
-            if (selected) {
-                //ToolButton.this.getModel().setPressed(true);
-                //ToolButton.this.getModel().setArmed(true);
-            } else {
+            if (!selected && !ToolBarManager.alwaysUseStandardRollover()) {
                 setBorderPainted(false);
             }
         }

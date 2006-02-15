@@ -26,7 +26,7 @@ public class ToolButton extends JButton {
     protected ArrayList containedGroups = new ArrayList();
     protected JButton _button;
     protected boolean selected;
-    private boolean _rollover;
+    private boolean rollover;
     
     private static String javaVersion =
         System.getProperties().getProperty("java.specification.version");
@@ -46,7 +46,7 @@ public class ToolButton extends JButton {
     
     public void setRolloverEnabled(boolean enabled) {
         super.setRolloverEnabled(enabled);
-        _rollover = enabled;
+        rollover = enabled;
     }
 
     public void setSelected(boolean selected) {
@@ -65,7 +65,7 @@ public class ToolButton extends JButton {
             //getModel().setPressed(false);
             //getModel().setArmed(false);
             setBackground(UIManager.getColor("control"));
-            super.setRolloverEnabled(_rollover);
+            super.setRolloverEnabled(rollover);
         }
     }
     

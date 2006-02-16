@@ -6,7 +6,6 @@
 
 package org.tigris.toolbar;
 
-import javax.swing.LookAndFeel;
 import javax.swing.UIManager;
 
 /**

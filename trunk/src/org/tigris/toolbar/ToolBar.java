@@ -61,7 +61,7 @@ public class ToolBar extends JToolBar {
     public JButton add(Action action) {
         JButton button = new ModalButton(action);
         add(button);
-        if (ToolBarManager.alwaysUseStandardRollover()) {
+        if (!ToolBarManager.alwaysUseStandardRollover()) {
             button.setBorderPainted(false);
         }
         if (javaVersion.equals("1.3")) {

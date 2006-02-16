@@ -7,18 +7,14 @@
 package org.tigris.toolbar;
 
 import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-
-import javax.swing.AbstractAction;
 import javax.swing.JPanel;
-import javax.swing.JToolBar;
 
 /**
  * The main test application panel made of of various sub panels
  *
  * @author Bob Tarling
  */
-public class MainPanel extends javax.swing.JPanel {
+public class MainPanel extends JPanel {
     
     private static MainPanel instance = new MainPanel();
     

@@ -48,7 +48,6 @@ abstract public class DecoratedIcon extends ImageIcon {
         _buffer = buffer;
         _popupIconWidth = _buffer[0].length;
         _popupIconHeight = _buffer.length;
-        //System.out.println("DecoratedIcon::image " + _imageIcon);
         int newWidth = _imageIcon.getIconWidth() + _popupIconOffset + _popupIconWidth;
         int newHeight = _imageIcon.getIconHeight();
         BufferedImage mergedImage = new BufferedImage(newWidth, newHeight, BufferedImage.TYPE_INT_ARGB);

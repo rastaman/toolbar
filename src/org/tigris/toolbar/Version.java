@@ -9,7 +9,7 @@ package org.tigris.toolbar;
  */
 public class Version {
 	public static int RELEASE_NUMBER = 1;
-	public static int MAJOR_REVISION_NUMBER = 1;
+	public static int MAJOR_REVISION_NUMBER = 2;
 	public static int MINOR_REVISION_NUMBER = 0;
 	private Version() {}
 	

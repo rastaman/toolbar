@@ -12,6 +12,8 @@ import java.util.Iterator;
 import javax.swing.Action;
 import javax.swing.JButton;
 
+import org.tigris.toolbar.ToolBarManager;
+
 /**
  * A toolbox which appears when the user click the drop down image on
  * a PopupToolBoxButton
@@ -20,8 +22,10 @@ import javax.swing.JButton;
  */
 public class PopupToolBox extends ToolBox {
 
-    ArrayList actions = new ArrayList();
-    MouseListener mouseListener;
+    private static final long serialVersionUID = 6967167639464142577L;
+    
+    private ArrayList actions = new ArrayList();
+    private MouseListener mouseListener;
 
     /** Creates a new instance of PopupToolBox */
     public PopupToolBox(int rows, int cols) {
@@ -55,7 +59,9 @@ public class PopupToolBox extends ToolBox {
         while(it.hasNext()) {
             Action a = (Action)it.next();
             JButton button = super.add(a);
-            button.setBorderPainted(false);
+            if (!ToolBarManager.alwaysUseStandardRollover()) {
+                button.setBorderPainted(false);
+            }
             if (mouseListener != null) {
                 button.addMouseListener(mouseListener);
             }

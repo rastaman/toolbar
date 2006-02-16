@@ -16,6 +16,8 @@ import javax.swing.JButton;
  */
 public class ModalButton extends ToolButton {
 
+    private static final long serialVersionUID = 4733916262660363021L;
+    
     private String tooltip;
     
     /** Creates a new instance of PopupToolboxButton

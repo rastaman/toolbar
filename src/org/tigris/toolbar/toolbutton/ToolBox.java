@@ -11,6 +11,8 @@ import javax.swing.Action;
 import javax.swing.JButton;
 import javax.swing.JToolBar;
 
+import org.tigris.toolbar.ToolBarManager;
+
 /**
  * A toolbar where buttons are shown in a grid instead of a row.
  * @author  Bob Tarling
@@ -51,9 +53,11 @@ public class ToolBox extends JToolBar {
         //this._rollover = rollover;
         // TODO Check for JDK1.4 before using Boolean.valueOf(rollover)
         //this.putClientProperty("JToolBar.isRollover", Boolean.valueOf(rollover));
-        Boolean showRollover = Boolean.FALSE;
-        if (rollover) showRollover = Boolean.TRUE;
-        this.putClientProperty("JToolBar.isRollover",  showRollover);
+        if (!ToolBarManager.alwaysUseStandardRollover()) {
+            Boolean showRollover = Boolean.FALSE;
+            if (rollover) showRollover = Boolean.TRUE;
+            this.putClientProperty("JToolBar.isRollover",  showRollover);
+        }
     }
     
     public JButton add(Action action) {

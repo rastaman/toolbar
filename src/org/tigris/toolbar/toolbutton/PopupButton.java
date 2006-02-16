@@ -19,6 +19,8 @@ import org.tigris.toolbar.toolbutton.ModalButton;
  */
 public class PopupButton extends ModalButton {
 
+    private static final long serialVersionUID = -7340673473849780507L;
+    
     /**
      * The popup component.
      */

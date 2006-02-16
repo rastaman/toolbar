@@ -25,14 +25,13 @@ import org.tigris.toolbar.ToolBarManager;
  */
 public class ToolButton extends JButton {
     
+    private static final long serialVersionUID = 6707530106426207396L;
+    
     protected ArrayList containedGroups = new ArrayList();
     protected JButton _button;
     protected boolean selected;
     private boolean rollover;
     
-    private static String javaVersion =
-        System.getProperties().getProperty("java.specification.version");
-
     public ToolButton(Action a) {
         super(a);
                 

@@ -368,7 +368,7 @@ public class ToolBarFactory {
         } else if (item instanceof Object[]) {
             Object[] subActions = (Object[])item;
             JButton button = buildPopupToolBoxButton(subActions, rollover);
-            if (ToolBarManager.alwaysUseStandardRollover()) {
+            if (!ToolBarManager.alwaysUseStandardRollover()) {
                 button.setBorderPainted(false);
             }
             toolBar.add(button);

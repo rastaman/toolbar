@@ -22,6 +22,8 @@ import javax.swing.ButtonModel;
 import javax.swing.UIManager;
 import javax.swing.event.MouseInputAdapter;
 
+import org.tigris.toolbar.ToolBarManager;
+
 /** 
  * An extension of JButton to which alternative actions can be added.
  * The button to trigger these actions become available when a
@@ -31,12 +33,15 @@ import javax.swing.event.MouseInputAdapter;
  */
 public class PopupToolBoxButton extends ToolButton {
 
+    private static final long serialVersionUID = -684520584458885655L;
+    
     private PopupToolBox _popupToolBox;
-    private DecoratedIcon _standardIcon;
+    private Icon _standardIcon;
     private String tooltip;
     private boolean _showSplitter;
     
-    /** Creates a new instance of PopupToolboxButton
+    /**
+     * Creates a new instance of PopupToolboxButton
      * @param a The default action when pressing this button
      * @param rows The number of rows of buttons to display in the popup toolbox
      * @param cols The number of columns of buttons to display in the popup toolbox
@@ -52,7 +57,8 @@ public class PopupToolBoxButton extends ToolButton {
         addMouseListener(myMouseListener);
     }
 
-    /** Provide a new default action for this button
+    /**
+     * Provide a new default action for this button
      * @param a The new default action
      */    
     public void setAction(Action a) {
@@ -94,7 +100,9 @@ public class PopupToolBoxButton extends ToolButton {
                     setSelected(true);
                     ButtonModel bm = getModel();
                     bm.setRollover(true);
-                    setBorderPainted(true);
+                    if (!ToolBarManager.alwaysUseStandardRollover()) {
+                        setBorderPainted(true);
+                    }
                     bm.setArmed(true);
                 }
                 popup.setVisible(false);
@@ -139,10 +147,11 @@ public class PopupToolBoxButton extends ToolButton {
     public void paint(Graphics g) {
         super.paint(g);
         Color[] colors = {
-	    getBackground(),
-	    UIManager.getColor("controlDkShadow"),
-	    UIManager.getColor("controlText"),
-	    UIManager.getColor("controlHighlight")};
+            getBackground(),
+            UIManager.getColor("controlDkShadow"),
+            UIManager.getColor("controlText"),
+            UIManager.getColor("controlHighlight")
+        };
 
         if (_showSplitter) {
             showSplitter(colors[1], g, getSplitterPosn(),     1, getHeight()-4);

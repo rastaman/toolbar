@@ -6,19 +6,20 @@
 
 package org.tigris.toolbar.toolbutton;
 
-import javax.swing.Action;
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JPopupMenu;
-
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Container;
 import java.awt.Graphics;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+import javax.swing.Action;
 import javax.swing.ButtonModel;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JPopupMenu;
 import javax.swing.UIManager;
 import javax.swing.event.MouseInputAdapter;
 
@@ -168,7 +169,17 @@ public class PopupToolBoxButton extends ToolButton {
         if (show && !_showSplitter) {
             _showSplitter = true;
             repaint();
-            setToolTipText("Select Tool");
+            String tt = null;
+            Container parent = getParent();
+            if (parent instanceof JComponent) {
+                /* This allows i18n of this tooltip: */
+                tt = (String) ((JComponent) parent).getClientProperty(
+                        "ToolBar.toolTipSelectTool");
+            }
+            if (tt == null) {
+                tt = "Select Tool";
+            }
+            setToolTipText(tt);
         } else if (!show && _showSplitter) {
             _showSplitter = false;
             repaint();

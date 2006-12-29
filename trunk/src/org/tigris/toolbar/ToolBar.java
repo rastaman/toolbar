@@ -36,14 +36,20 @@ public class ToolBar extends JToolBar {
     
     private List hiddenComponents;
     
-    /** Creates a new instance of an un-named horizontal ToolBar
+    private String dropDownToolTip;
+    
+    /**
+     * Creates a new instance of an un-named horizontal ToolBar
+     * @deprecated in 1.4 use ToolBarFactory
      */
     public ToolBar() {
         this("");
     }
     
-    /** Creates a new instance of a horizontal ToolBar with the given name
+    /**
+     * Creates a new instance of a horizontal ToolBar with the given name
      * @param name the title to display while floating
+     * @deprecated in 1.4 use ToolBarFactory
      */
     public ToolBar(String name) {
         this(name, HORIZONTAL);
@@ -54,6 +60,7 @@ public class ToolBar extends JToolBar {
      * All other constructors call this constructor.
      * @param name the title to display while floating
      * @param orientation HORIZONTAL or VERTICAL
+     * @deprecated in 1.4 use ToolBarFactory
      */
     public ToolBar(String name, int orientation) {
         super(name, orientation);
@@ -67,8 +74,7 @@ public class ToolBar extends JToolBar {
      * Creates a new instance of an un-named ToolBar with the given
      * orientation
      * @param orientation HORIZONTAL or VERTICAL
-     * TODO: Provide a factory method for this, then ToolBar can become
-     * package private.
+     * @deprecated in 1.4 use ToolBarFactory
      */
     public ToolBar(int orientation) {
         this("", orientation);
@@ -145,5 +151,13 @@ public class ToolBar extends JToolBar {
 	Component[] componentArray = new Component[hiddenComponents.size()];
 	hiddenComponents.toArray(componentArray);
 	return componentArray;
+    }
+    
+    public void setDropDownTooltip(String dropDownToolTip) {
+	this.dropDownToolTip = dropDownToolTip;
+    }
+    
+    public String getDropDownTooltip() {
+	return dropDownToolTip;
     }
 }

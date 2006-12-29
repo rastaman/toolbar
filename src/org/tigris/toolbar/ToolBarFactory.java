@@ -26,8 +26,67 @@ import org.tigris.toolbar.toolbutton.PopupToolBoxButton;
  */
 public class ToolBarFactory {
     
-    /** Cannot construct a utility class */
-    private ToolBarFactory() {
+    private Object[] items;
+    private boolean rollover;
+    private boolean floatable;
+    private int orientation = JToolBar.HORIZONTAL;
+    private String dropDownToolTip;
+    
+    /**
+     * Create a TooBarFactory from an array of Objects
+     */
+    public ToolBarFactory(Object items[]) {
+	this.items = items;
+    }
+
+    /**
+     * Create a TooBarFactory from a collection of Objects
+     */
+    public ToolBarFactory(Collection items) {
+	this.items = items.toArray();
+    }
+    
+    public void setRollover(boolean rollover) {
+	this.rollover = rollover;
+    }
+
+    public void setFloatable(boolean floatable) {
+	this.floatable = floatable;
+    }
+
+    public void setOrientation(int orientation) {
+	this.orientation = orientation;
+    }
+    
+    public void setDropDownTooltip(String dropDownToolTip) {
+	this.dropDownToolTip = dropDownToolTip;
+    }
+    
+    /**
+     * Factory method to create a new toolbar from the properties
+     * of this ToolBarFactory
+     */
+    public JToolBar createToolBar() {
+	return createToolBar((String) null);
+    }
+
+    /**
+     * Factory method to create a new named toolbar from the properties
+     * of this ToolBarFactory
+     */
+    public JToolBar createToolBar(String name) {
+        ToolBar tb = new ToolBar(name);
+        if (!ToolBarManager.alwaysUseStandardRollover()) {
+            if (rollover) {
+                tb.putClientProperty("JToolBar.isRollover",  Boolean.TRUE);
+            } else {
+                tb.putClientProperty("JToolBar.isRollover",  Boolean.FALSE);
+            }
+        }
+        tb.setFloatable(floatable);
+        addItemsToToolBar(tb, items, rollover, dropDownToolTip);
+        tb.setOrientation(orientation);
+        return tb;
     }
 
     /**
@@ -45,6 +104,8 @@ public class ToolBarFactory {
      * <td>Will place the component on the toolbar</td></tr>
      * </table>
      * @param items the array of elements representing toolbar items
+     * @deprecated in release 1.4. Construct an instance of JToolBarFactory
+     * and use the instance method createToolBar
      */
     public static JToolBar createToolBar(Object items[]) {
         return createToolBar(false/*rollover*/, "", items, true/*floatable*/);
@@ -55,6 +116,8 @@ public class ToolBarFactory {
      * on the given array with the given rollover effect.</p>
      * @param rollover true if buttons are to be shown with rollover effect
      * @param items the array of elements representing toolbar items
+     * @deprecated in release 1.4. Construct an instance of JToolBarFactory
+     * and use the instance method createToolBar
      */
     public static JToolBar createToolBar(boolean rollover, Object items[]) {
         return createToolBar(rollover, items, true/*floatable*/);
@@ -67,6 +130,8 @@ public class ToolBarFactory {
      * @param items the array of elements representing toolbar items
      * @param floatable true if the toolbar can be dragged into a floating
      *                  position
+     * @deprecated in release 1.4. Construct an instance of JToolBarFactory
+     * and use the instance method createToolBar
      */
     public static JToolBar createToolBar(boolean rollover, Object items[], boolean floatable) {
         return createToolBar(rollover, "", items, floatable);
@@ -79,6 +144,8 @@ public class ToolBarFactory {
      * @param items the array of elements representing toolbar items
      * @param floatable true if the toolbar can be dragged into a floating
      *                  position
+     * @deprecated in release 1.4. Construct an instance of JToolBarFactory
+     * and use the instance method createToolBar
      */
     public static JToolBar createToolBar(String name, Object items[]) {
         return createToolBar(false/*rollover*/, name, items, true/*floatable*/);
@@ -91,6 +158,8 @@ public class ToolBarFactory {
      * @param items the array of elements representing toolbar items
      * @param floatable true if the toolbar can be dragged into a floating
      *                  position
+     * @deprecated in release 1.4. Construct an instance of JToolBarFactory
+     * and use the instance method createToolBar
      */
     public static JToolBar createToolBar(String name, Object items[], boolean floatable) {
         return createToolBar(false/*rollover*/, name, items, floatable);
@@ -104,6 +173,8 @@ public class ToolBarFactory {
      * @param items the array of elements representing toolbar items
      * @param floatable true if the toolbar can be dragged into a floating
      *                  position
+     * @deprecated in release 1.4. Construct an instance of JToolBarFactory
+     * and use the instance method createToolBar
      */
     public static JToolBar createToolBar(boolean rollover, 
                                          String name, 
@@ -118,7 +189,7 @@ public class ToolBarFactory {
             }
         }
         tb.setFloatable(floatable);
-        addItemsToToolBar(tb, items, rollover);
+        addItemsToToolBar(tb, items, rollover, null);
         return tb;
     }
 
@@ -137,6 +208,8 @@ public class ToolBarFactory {
      * <td>Will place the component on the toolbar</td></tr>
      * </table>
      * @param items the collection of elements representing toolbar items
+     * @deprecated in release 1.4. Construct an instance of JToolBarFactory
+     * and use the instance method createToolBar
      */
     public static JToolBar createToolBar(Collection items) {
         return createToolBar(false/*rollover*/, "", items, true/*floatable*/);
@@ -147,6 +220,8 @@ public class ToolBarFactory {
      * on the given array with the given rollover effect.</p>
      * @param rollover true if buttons are to be shown with rollover effect
      * @param items the collection of elements representing toolbar items
+     * @deprecated in release 1.4. Construct an instance of JToolBarFactory
+     * and use the instance method createToolBar
      */
     public static JToolBar createToolBar(boolean rollover, Collection items) {
         return createToolBar(rollover, items, true/*floatable*/);
@@ -159,6 +234,8 @@ public class ToolBarFactory {
      * @param items the collection of elements representing toolbar items
      * @param floatable true if the toolbar can be dragged into a floating
      *                  position
+     * @deprecated in release 1.4. Construct an instance of JToolBarFactory
+     * and use the instance method createToolBar
      */
     public static JToolBar createToolBar(boolean rollover, Collection items, boolean floatable) {
         return createToolBar(rollover, "", items, floatable);
@@ -171,6 +248,8 @@ public class ToolBarFactory {
      * @param items the collection of elements representing toolbar items
      * @param floatable true if the toolbar can be dragged into a floating
      *                  position
+     * @deprecated in release 1.4. Construct an instance of JToolBarFactory
+     * and use the instance method createToolBar
      */
     public static JToolBar createToolBar(String name, Collection items) {
         return createToolBar(false/*rollover*/, name, items, true/*floatable*/);
@@ -183,6 +262,8 @@ public class ToolBarFactory {
      * @param items the collection of elements representing toolbar items
      * @param floatable true if the toolbar can be dragged into a floating
      *                  position
+     * @deprecated in release 1.4. Construct an instance of JToolBarFactory
+     * and use the instance method createToolBar
      */
     public static JToolBar createToolBar(String name, Collection items, boolean floatable) {
         return createToolBar(false/*rollover*/, name, items, floatable);
@@ -196,6 +277,8 @@ public class ToolBarFactory {
      * @param items the collection of elements representing toolbar items
      * @param floatable true if the toolbar can be dragged into a floating
      *                  position
+     * @deprecated in release 1.4. Construct an instance of JToolBarFactory
+     * and use the instance method createToolBar
      */
     public static JToolBar createToolBar(boolean rollover, 
                                          String name, 
@@ -208,7 +291,7 @@ public class ToolBarFactory {
             tb.putClientProperty("JToolBar.isRollover",  Boolean.FALSE);
         }
         tb.setFloatable(floatable);
-        addItemsToToolBar(tb, items, rollover);
+        addItemsToToolBar(tb, items, rollover, null);
         return tb;
     }
     
@@ -218,6 +301,8 @@ public class ToolBarFactory {
      * <p>All JMenuItems contained in the JMenu are examined to see if they
      * have an icon. If they do there actions are added to the toolbar.
      * @param menu the menu of elements representing toolbar items
+     * @deprecated in release 1.4. Construct an instance of JToolBarFactory
+     * and use the instance method createToolBar
      */
     public static JToolBar createToolBar(JMenu menu) {
         return createToolBar(false/*rollover*/, "", menu, true/*floatable*/);
@@ -228,6 +313,8 @@ public class ToolBarFactory {
      * on the given menu with the given rollover effect.</p>
      * @param rollover true if buttons are to be shown with rollover effect
      * @param menu the menu of elements representing toolbar items
+     * @deprecated in release 1.4. Construct an instance of JToolBarFactory
+     * and use the instance method createToolBar
      */
     public static JToolBar createToolBar(boolean rollover, JMenu menu) {
         return createToolBar(rollover, menu, true/*floatable*/);
@@ -240,6 +327,8 @@ public class ToolBarFactory {
      * @param menu the menu of elements representing toolbar items
      * @param floatable true if the toolbar can be dragged into a floating
      *                  position
+     * @deprecated in release 1.4. Construct an instance of JToolBarFactory
+     * and use the instance method createToolBar
      */
     public static JToolBar createToolBar(boolean rollover, JMenu menu, boolean floatable) {
         return createToolBar(rollover, "", menu, floatable);
@@ -252,6 +341,8 @@ public class ToolBarFactory {
      * @param menu the menu of elements representing toolbar items
      * @param floatable true if the toolbar can be dragged into a floating
      *                  position
+     * @deprecated in release 1.4. Construct an instance of JToolBarFactory
+     * and use the instance method createToolBar
      */
     public static JToolBar createToolBar(String name, JMenu menu) {
         return createToolBar(false/*rollover*/, name, menu, true/*floatable*/);
@@ -264,6 +355,8 @@ public class ToolBarFactory {
      * @param menu the menu of elements representing toolbar items
      * @param floatable true if the toolbar can be dragged into a floating
      *                  position
+     * @deprecated in release 1.4. Construct an instance of JToolBarFactory
+     * and use the instance method createToolBar
      */
     public static JToolBar createToolBar(String name, JMenu menu, boolean floatable) {
         return createToolBar(false/*rollover*/, name, menu, floatable);
@@ -277,6 +370,8 @@ public class ToolBarFactory {
      * @param menu the menu of elements representing toolbar items
      * @param floatable true if the toolbar can be dragged into a floating
      *                  position
+     * @deprecated in release 1.4. Construct an instance of JToolBarFactory
+     * and use the instance method createToolBar
      */
     public static JToolBar createToolBar(boolean rollover, 
                                          String name, 
@@ -311,7 +406,7 @@ public class ToolBarFactory {
             tb.putClientProperty("JToolBar.isRollover",  Boolean.FALSE);
         }
         tb.setFloatable(floatable);
-        addItemsToToolBar(tb, items, rollover);
+        addItemsToToolBar(tb, items, rollover, null);
         return tb;
     }
 
@@ -321,9 +416,9 @@ public class ToolBarFactory {
      * @param items the items on which to base the buttons
      * @param rollover true if rollover effect is required.
      */
-    private static void addItemsToToolBar(JToolBar toolBar, Object items[], boolean rollover) {
+    private static void addItemsToToolBar(JToolBar toolBar, Object items[], boolean rollover, String dropDownToolTip) {
         for (int i=0; i < items.length; ++i) {
-            addItemToToolBar(toolBar, items[i], rollover);
+            addItemToToolBar(toolBar, items[i], rollover, dropDownToolTip);
         }
     }
 
@@ -333,15 +428,15 @@ public class ToolBarFactory {
      * @param items the items on which to base the buttons
      * @param rollover true if rollover effect is required.
      */
-    private static void addItemsToToolBar(JToolBar toolBar, Collection items, boolean rollover) {
+    private static void addItemsToToolBar(JToolBar toolBar, Collection items, boolean rollover, String dropDownToolTip) {
         
         Iterator it = items.iterator();
         while (it.hasNext()) {
-            addItemToToolBar(toolBar, it.next(), rollover);
+            addItemToToolBar(toolBar, it.next(), rollover, dropDownToolTip);
         }
     }
 
-    private static void addItemToToolBar(JToolBar toolBar, Object item, boolean rollover) {
+    private static void addItemToToolBar(JToolBar toolBar, Object item, boolean rollover, String dropDownToolTip) {
         
         if (item == null) {
             toolBar.addSeparator();
@@ -353,7 +448,7 @@ public class ToolBarFactory {
             }
         } else if (item instanceof Object[]) {
             Object[] subActions = (Object[])item;
-            JButton button = buildPopupToolBoxButton(subActions, rollover);
+            JButton button = buildPopupToolBoxButton(subActions, rollover, dropDownToolTip);
             if (!ToolBarManager.alwaysUseStandardRollover()) {
                 button.setBorderPainted(false);
             }
@@ -363,7 +458,7 @@ public class ToolBarFactory {
         }
     }
 
-    private static PopupToolBoxButton buildPopupToolBoxButton(Object[] actions, boolean rollover) {
+    private static PopupToolBoxButton buildPopupToolBoxButton(Object[] actions, boolean rollover, String dropDownToolTip) {
         PopupToolBoxButton toolBox = null;
         for (int i=0; i < actions.length; ++i) {
             if (actions[i] instanceof Action) {
@@ -384,6 +479,10 @@ public class ToolBarFactory {
                 }
             }
         }
+        toolBox.setDropDownToolTip(dropDownToolTip);
+
         return toolBox;
     }
+    
+    
 }

@@ -39,7 +39,8 @@ public class PopupToolBoxButton extends ToolButton {
     private PopupToolBox _popupToolBox;
     private Icon _standardIcon;
     private String tooltip;
-    private boolean _showSplitter;
+    private boolean showSplitter;
+    private String dropDownToolTip;
     
     /**
      * Creates a new instance of PopupToolboxButton
@@ -154,10 +155,14 @@ public class PopupToolBoxButton extends ToolButton {
             UIManager.getColor("controlHighlight")
         };
 
-        if (_showSplitter) {
+        if (showSplitter) {
             showSplitter(colors[1], g, getSplitterPosn(),     1, getHeight()-4);
             showSplitter(colors[3], g, getSplitterPosn() + 1, 1, getHeight()-4);
         }
+    }
+    
+    public void setDropDownToolTip(String dropDownToolTip) {
+	this.dropDownToolTip = dropDownToolTip;
     }
     
     public void showSplitter(Color c, Graphics g, int x, int y, int height) {
@@ -166,29 +171,27 @@ public class PopupToolBoxButton extends ToolButton {
     }
     
     public void showSplitter(boolean show) {
-        if (show && !_showSplitter) {
-            _showSplitter = true;
+        if (show && !showSplitter) {
+            showSplitter = true;
             repaint();
             String tt = null;
             Container parent = getParent();
             if (parent instanceof JComponent) {
-                /* This allows i18n of this tooltip: */
-                tt = (String) ((JComponent) parent).getClientProperty(
-                        "ToolBar.toolTipSelectTool");
+                tt = dropDownToolTip;
             }
             if (tt == null) {
                 tt = "Select Tool";
             }
             setToolTipText(tt);
-        } else if (!show && _showSplitter) {
-            _showSplitter = false;
+        } else if (!show && showSplitter) {
+            showSplitter = false;
             repaint();
             setToolTipText(tooltip);
         }
     }
 
     protected void performAction(java.awt.event.ActionEvent actionEvent) {
-        if (_showSplitter) {
+        if (showSplitter) {
             popup();
         } else {
             super.performAction(actionEvent);

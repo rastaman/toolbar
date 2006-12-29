@@ -123,13 +123,11 @@ public class ToolBar extends JToolBar {
                 }
             }
             if (hide) {
-                System.out.println("Hide");
                 hiddenComponents = new ArrayList();
                 int i = 0;
                 while (i < getComponentCount()) {
                     Component c = getComponent(i);
                     if (c != overflowButton && c.getX() + c.getWidth() > overflowX) {
-                        System.out.println("Hiding " + c);
                         hiddenComponents.add(c);
                         remove(c);
                     } else {

@@ -71,6 +71,9 @@ public class ToolButton extends JButton {
     }
     
     public Action getRealAction() {
+	if (_button == null) {
+	    return null;
+	}
         return _button.getAction();
     }
     
@@ -83,7 +86,9 @@ public class ToolButton extends JButton {
     
     protected class ToolButtonAction extends AbstractButtonAction {
         
-        public ToolButtonAction() {
+	private static final long serialVersionUID = 3795102603065565883L;
+
+	public ToolButtonAction() {
             super();
         }
         
@@ -104,7 +109,8 @@ public class ToolButton extends JButton {
          * PopupToolBoxButton area
          */
         public void mouseEntered(MouseEvent me) {
-            if (getRealAction().isEnabled() && !ToolBarManager.alwaysUseStandardRollover()) {
+            Action realAction = getRealAction();
+            if (realAction != null && realAction.isEnabled() && !ToolBarManager.alwaysUseStandardRollover()) {
                 setBorderPainted(true);
             }
         }

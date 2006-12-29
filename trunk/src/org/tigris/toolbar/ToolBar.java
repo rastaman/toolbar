@@ -6,22 +6,36 @@
 
 package org.tigris.toolbar;
 
+import java.awt.Component;
 import java.awt.Insets;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.swing.Action;
 import javax.swing.JButton;
 import javax.swing.JToolBar;
 import org.tigris.toolbar.toolbutton.ModalButton;
+import org.tigris.toolbar.toolbutton.OverflowButton;
 
 /**
  * A toolbar class which assumes rollover effects and automatically gives tooltip
  * to any buttons created by adding an action.
+ * Use ToolBarFactory to create.
  *
  * @author  Bob Tarling
  */
 public class ToolBar extends JToolBar {
     
-    String javaVersion;
-
+    private static final long serialVersionUID = -5763580513766833944L;
+    
+    private String javaVersion;
+    
+    private JButton overflowButton;
+    
+    private List hiddenComponents;
+    
     /** Creates a new instance of an un-named horizontal ToolBar
      */
     public ToolBar() {
@@ -35,7 +49,9 @@ public class ToolBar extends JToolBar {
         this(name, HORIZONTAL);
     }
     
-    /** Creates a new instance of ToolBar with the given name and orientation
+    /**
+     * Creates a new instance of ToolBar with the given name and orientation
+     * All other constructors call this constructor.
      * @param name the title to display while floating
      * @param orientation HORIZONTAL or VERTICAL
      */
@@ -43,10 +59,16 @@ public class ToolBar extends JToolBar {
         super(name, orientation);
         javaVersion = System.getProperties().getProperty("java.specification.version");
         this.setMargin(new Insets(0,0,0,0));
+        overflowButton = new OverflowButton(ToolBar.this, isRollover());
+        addComponentListener(new SizeListener());
     }
     
-    /** Creates a new instance of an un-named ToolBar with the given orientation
+    /**
+     * Creates a new instance of an un-named ToolBar with the given
+     * orientation
      * @param orientation HORIZONTAL or VERTICAL
+     * TODO: Provide a factory method for this, then ToolBar can become
+     * package private.
      */
     public ToolBar(int orientation) {
         this("", orientation);
@@ -69,5 +91,61 @@ public class ToolBar extends JToolBar {
             button.setMargin(new Insets(0,0,0,0));
         }
         return button;
+    }
+
+    protected void addImpl(Component comp, Object constraints, int index) {
+        if (comp instanceof OverflowButton) {
+            overflowButton = (OverflowButton) comp;
+        }
+        super.addImpl(comp, constraints, index);
+    }
+
+    private class SizeListener extends ComponentAdapter {
+
+        public void componentResized(ComponentEvent e) {
+            super.componentResized(e);
+            
+            if (hiddenComponents != null) {
+                remove(overflowButton);
+        	for(int i=0; i < hiddenComponents.size(); ++i) {
+        	    add((Component) hiddenComponents.get(i));
+        	}
+        	hiddenComponents = null;
+            }
+            int overflowX = getWidth() - overflowButton.getWidth();
+            overflowButton.setLocation(
+            	overflowX, overflowButton.getHeight());
+            boolean hide = false;
+            for (int i = 0; i < getComponentCount() && !hide; ++i) {
+                Component c = getComponent(i);
+                if (c != overflowButton && c.getX() + c.getWidth() > getWidth()) {
+                    hide = true;
+                }
+            }
+            if (hide) {
+                System.out.println("Hide");
+                hiddenComponents = new ArrayList();
+                int i = 0;
+                while (i < getComponentCount()) {
+                    Component c = getComponent(i);
+                    if (c != overflowButton && c.getX() + c.getWidth() > overflowX) {
+                        System.out.println("Hiding " + c);
+                        hiddenComponents.add(c);
+                        remove(c);
+                    } else {
+                        ++i;
+                    }
+                }
+                remove(overflowButton);
+                add(overflowButton);
+                validate();
+            }
+	}
+    }
+    
+    public Component[] getOverflowActions() {
+	Component[] componentArray = new Component[hiddenComponents.size()];
+	hiddenComponents.toArray(componentArray);
+	return componentArray;
     }
 }

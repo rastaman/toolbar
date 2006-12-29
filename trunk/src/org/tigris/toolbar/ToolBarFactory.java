@@ -15,6 +15,7 @@ import javax.swing.JButton;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JToolBar;
+
 import org.tigris.toolbar.toolbutton.PopupToolBoxButton;
 
 /**
@@ -121,13 +122,6 @@ public class ToolBarFactory {
         return tb;
     }
 
-
-
-    
-    /********************************/
-
-
-
     /**
      * <p>Create a new toolbar containing buttons and other controls based
      * on the given array.</p>
@@ -217,14 +211,6 @@ public class ToolBarFactory {
         addItemsToToolBar(tb, items, rollover);
         return tb;
     }
-    
-    
-    
-    
-    /********************************/
-    
-    
-    
     
     /**
      * <p>Create a new toolbar containing buttons and other controls based

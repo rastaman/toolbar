@@ -6,7 +6,7 @@
   <groupId>org.tigris.toolbar</groupId>
   <artifactId>toolbar</artifactId>
   <packaging>jar</packaging>
-  <version>1.2</version>
+  <version>1.4beta</version>
   <name>Toolbar</name>
   <url>http://toolbar.tigris.org</url>
   <description>An improved extension of JToolBar with extra support classes  </description>

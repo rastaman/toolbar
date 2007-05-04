@@ -27,6 +27,7 @@ public class ModalButton extends ToolButton {
      */
     public ModalButton(Action a) {
         super(a);
+        putClientProperty("hideActionText", Boolean.TRUE);
         setAction(a);
     }
 

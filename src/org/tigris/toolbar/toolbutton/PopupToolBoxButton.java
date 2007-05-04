@@ -79,7 +79,9 @@ public class PopupToolBoxButton extends ToolButton {
         }
         _button.setText(null);
         
-        _standardIcon = new DropDownIcon((ImageIcon)realIcon);
+        if (realIcon != null) {
+            _standardIcon = new DropDownIcon((ImageIcon)realIcon);
+        }
         
         // Remove any knowledge of the action to perform from the ancestor
         // we take control of performing the action and displaying the icon.
@@ -206,7 +208,9 @@ public class PopupToolBoxButton extends ToolButton {
          * then change the icon.
          */
         public void mouseMoved(MouseEvent me) {
-            showSplitter(me.getX() >= getSplitterPosn());
+            if (_standardIcon != null) {
+                showSplitter(me.getX() >= getSplitterPosn());
+            }
         }
 
         /**
@@ -215,7 +219,9 @@ public class PopupToolBoxButton extends ToolButton {
          * PopupToolBoxButton area
          */
         public void mouseEntered(MouseEvent me) {
-            showSplitter(me.getX() >= getSplitterPosn());
+            if (_standardIcon != null) {
+        	showSplitter(me.getX() >= getSplitterPosn());
+            }
         }
 
         /**
@@ -223,7 +229,9 @@ public class PopupToolBoxButton extends ToolButton {
          * button.
          */
         public void mouseExited(MouseEvent me) {
-            showSplitter(false);
+            if (_standardIcon != null) {
+        	showSplitter(false);
+            }
         }
     }
 }

@@ -10,9 +10,11 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Graphics;
+import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.ButtonModel;
 import javax.swing.Icon;
@@ -22,6 +24,8 @@ import javax.swing.JComponent;
 import javax.swing.JPopupMenu;
 import javax.swing.UIManager;
 import javax.swing.event.MouseInputAdapter;
+import javax.swing.event.PopupMenuEvent;
+import javax.swing.event.PopupMenuListener;
 
 import org.tigris.toolbar.ToolBarManager;
 
@@ -41,7 +45,9 @@ public class PopupToolBoxButton extends ToolButton {
     private String tooltip;
     private boolean showSplitter;
     private String dropDownToolTip;
-    
+    private boolean popupButtonActive = true;
+    private boolean popupMenuIsShowing = false;
+
     /**
      * Creates a new instance of PopupToolboxButton
      * @param a The default action when pressing this button
@@ -94,11 +100,14 @@ public class PopupToolBoxButton extends ToolButton {
     private void popup() {
         final JPopupMenu popup = new JPopupMenu();
         
+        PopupMenuListener pml = new MyPopupMenuListener();
+        popup.addPopupMenuListener(pml);
+
         MouseAdapter m = (new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 Component c = e.getComponent();
                 if (c instanceof ModalButton) {
-                    Action a = ((ModalButton)c).getRealAction();
+                Action a = ((ModalButton)c).getRealAction();
                     setAction(a);
                     a.putValue("popped", Boolean.valueOf(true));
                     setSelected(true);
@@ -117,6 +126,7 @@ public class PopupToolBoxButton extends ToolButton {
         _popupToolBox.rebuild();
         popup.add(_popupToolBox);
         popup.show(this, 0, getHeight());
+        popupMenuIsShowing = true;
     }
 
     /** Add a new action to appear as a button on the
@@ -194,12 +204,45 @@ public class PopupToolBoxButton extends ToolButton {
 
     protected void performAction(java.awt.event.ActionEvent actionEvent) {
         if (showSplitter) {
-            popup();
+            if (popupButtonActive) {
+                popup();
+                popupButtonActive = false;
+            } else {
+                popupButtonActive = true;
+            }
         } else {
             super.performAction(actionEvent);
         }
     }
     
+    private class MyPopupMenuListener extends AbstractAction implements
+        PopupMenuListener {
+
+        private static final long serialVersionUID = 5826768442190256559L;
+
+        public void actionPerformed(ActionEvent e) {
+        }
+
+        /**
+         * If the the menu is being cancelled, and the showSplitter field is
+         * true, it means the mouse is over the invoker button. So leave the
+         * button disabled until the mouse leaves the button.
+         */
+        public void popupMenuCanceled(PopupMenuEvent e) {
+            if (showSplitter) {
+                popupButtonActive = false;
+            } else {
+                popupButtonActive = true;
+            }
+            popupMenuIsShowing = false;
+        }
+
+        public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {}
+
+        public void popupMenuWillBecomeVisible(PopupMenuEvent e) {}
+
+    };
+
     private class MyMouseListener extends MouseInputAdapter {
 
         /**
@@ -230,7 +273,21 @@ public class PopupToolBoxButton extends ToolButton {
          */
         public void mouseExited(MouseEvent me) {
             if (_standardIcon != null) {
-        	showSplitter(false);
+                showSplitter(false);
+            }
+            if (!popupButtonActive && !popupMenuIsShowing)
+            {
+                popupButtonActive = true;
+            }
+        }
+
+        /**
+         * Catch the down stroke of mouse click to make the popup appear a tiny
+         * bit earlier.
+         */
+        public void mousePressed(MouseEvent me) {
+            if (popupButtonActive && showSplitter) {
+                popup();
             }
         }
     }

@@ -204,11 +204,10 @@ public class PopupToolBoxButton extends ToolButton {
 
     protected void performAction(java.awt.event.ActionEvent actionEvent) {
         if (showSplitter) {
-            if (popupButtonActive) {
+            /* The normal way of doing a popup is through mousePressed().
+             * Only do it this way if the keyboard performed the action. */
+            if ( actionEvent.getModifiers() == 0 ) {
                 popup();
-                popupButtonActive = false;
-            } else {
-                popupButtonActive = true;
             }
         } else {
             super.performAction(actionEvent);
@@ -288,6 +287,10 @@ public class PopupToolBoxButton extends ToolButton {
         public void mousePressed(MouseEvent me) {
             if (popupButtonActive && showSplitter) {
                 popup();
+            }
+            else if ( !popupMenuIsShowing )
+            {
+                popupButtonActive = true;
             }
         }
     }
